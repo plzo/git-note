@@ -246,6 +246,12 @@ cat /proc/cpuinfo | grep "processor" | sort | uniq | wc -l
 
 
 ```
+## 确定python的sit-packages路径
+```
+python
+from  distutils.sysconfig  import  get_python_lib
+print  get_python_lib()
+```
 ## 4.2. 切换用户
 ```
 sudo -s #切换到root，环境变量不变
