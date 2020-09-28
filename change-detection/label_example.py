@@ -7,10 +7,12 @@ from aidi410.aidi_vision import *
 
 
 def batch_json2aqlabel():
-    root_dir = "F:/yang.xie/aidi/big9000_0820/classify_origin/RegClassify_0"
-    json_dir = root_dir + "/label_json"
-    img_dir = root_dir + "/source"
-    dst_dir = root_dir + "/label"
+    root_dir = "D:/yang.xie/aidi_projects/check_class/xbq-b/RegClassify_0"
+    json_dir = root_dir + "/label"
+    img_dir = root_dir + "/source_aqimg"
+    dst_dir = root_dir + "/label_aqlabel"
+    if not os.path.exists(json_dir):
+	    os.makedirs(json_dir)
     
     indexs = _get_indexs(img_dir)
     count = 0

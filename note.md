@@ -246,7 +246,7 @@ cat /proc/cpuinfo | grep "processor" | sort | uniq | wc -l
 
 
 ```
-## 确定python的sit-packages路径
+## 确定python的site-packages路径
 ```
 python
 from  distutils.sysconfig  import  get_python_lib

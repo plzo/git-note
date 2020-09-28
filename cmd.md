@@ -58,3 +58,11 @@ view F:\yang.xie\data\luyan\label\1.aqlabel
 view F:\yang.xie\data\luyan\label\1.aqlabel --idx=0
 view -f json F:\yang.xie\aidi\label0725\label0725_test\Segment_0\label\1.aqlabel
 ```
+
+
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all\RegClassify_0\task.json
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_double\RegClassify_0\task.json
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_single\RegClassify_0\task.json
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all_2class\RegClassify_0\task.json
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_double_2class\RegClassify_0\task.json
+
