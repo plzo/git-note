@@ -3,11 +3,14 @@ import sys
 import shutil
 import json
 import random
+import copy
+import xlwt
 sys.path.insert(0,'D:/yang.xie/packages')
 from aidi410_label.aidi_vision import *
 import xml.dom.minidom
 
 xml_leval_dict_ = {}
+# confusion_matrix_dict_ = {}
 
 def get_name_score(one_label_path):
 	in_label = LabelIO()
@@ -126,6 +129,175 @@ def eval_one_set(root_dir,train_list):
 		compare_res[compare_label(label_path,prob_path)[1]] += 1
 	return compare_res
 
+def make_pair(label_name,label_score):
+	one_data = {}
+	one_data['name'] = label_name
+	one_data['score'] = label_score
+	return one_data
+
+
+def list_add_level(name_list):
+	name_list_level = []
+	for name in name_list:
+		if name == 'OK':
+			name_list_level.append(name)
+			continue
+		name_list_level.append(name + '_轻度')
+		name_list_level.append(name + '_中度')
+		name_list_level.append(name + '_严重')
+	return name_list_level
+
+
+def init_matrix(name_list):
+	label_prob_dict = {}
+	for name_row in name_list:
+		tmp_dict = {}
+		for name_col in name_list:
+			tmp_dict[name_col] = 0.
+		label_prob_dict[name_row] = tmp_dict
+	return label_prob_dict
+
+def get_name_level(one_data):
+	if one_data['name'] == 'OK':
+		return 'OK'
+	if one_data['score'] < 0.45:
+		return one_data['name'] + '_轻度'
+	if one_data['score'] < 0.75:
+		return one_data['name'] + '_中度'
+	return one_data['name'] + '_严重'
+
+def matrix_reduce_0(matrix):
+	matrix_reduce = {}
+	for (name1, dict_tmp) in matrix.items():
+		total = 0
+		for (name2, num) in dict_tmp.items():
+			total += num
+		matrix_reduce[name1] = total
+	return matrix_reduce
+		
+
+def get_matrix(root_dir,train_list,out_name):
+	name_dict = {}
+	name_list = []
+	label_list = []
+	prob_list = []
+
+	test_result_dir = root_dir + '/test_result'
+	label_dir = root_dir + '/label'
+	for one_label in train_list:
+		label_path = label_dir + '/' + one_label
+		prob_path = test_result_dir + '/' + one_label
+		label_name,label_score = get_name_score(label_path)
+		prob_name,prob_score = get_name_score(prob_path)
+
+		name_dict[label_name] = 0
+		name_dict[prob_name] = 0
+
+		label_list.append(make_pair(label_name,label_score))
+		prob_list.append(make_pair(prob_name,prob_score))
+	for (name,num) in name_dict.items():
+		name_list.append(name)
+		
+	name_list_level = list_add_level(name_list)
+	origin_matrix = init_matrix(name_list_level)
+	origin_matrix_small = init_matrix(name_list)
+
+	label_prob_matrix = copy.deepcopy(origin_matrix)
+	prob_label_matrix = copy.deepcopy(origin_matrix)
+
+	label_prob_matrix_small = copy.deepcopy(origin_matrix_small)
+	prob_label_matrix_small = copy.deepcopy(origin_matrix_small)
+	for i in range(len(label_list)):
+		new_label_name = get_name_level(label_list[i])
+		new_prob_name = get_name_level(prob_list[i])
+		label_prob_matrix[new_label_name][new_prob_name] += 1
+		prob_label_matrix[new_prob_name][new_label_name] += 1
+
+		label_prob_matrix_small[label_list[i]['name']][prob_list[i]['name']] += 1
+		prob_label_matrix_small[prob_list[i]['name']][label_list[i]['name']] += 1
+
+	workbook = xlwt.Workbook(encoding='utf-8')
+	train_sheet = workbook.add_sheet('sheet 1', cell_overwrite_ok=True)	
+
+	for num,one_name in enumerate(name_list_level):
+		train_sheet.write(0,num + 1,one_name)
+		train_sheet.write(num + 1,0,one_name)
+	for row,row_name in enumerate(name_list_level):
+		for col,col_name in enumerate(name_list_level):
+			train_sheet.write(row + 1,col + 1,label_prob_matrix[row_name][col_name])
+
+	row_num = len(name_list_level)
+	row_num += 1
+	train_sheet.write(0,row_num,'defects_name')
+	for num,one_name in enumerate(name_list_level):	
+		train_sheet.write(num + 1,row_num,one_name)
+
+	row_num += 1
+	# train_sheet.write(row_num,0,'precision')
+	train_sheet.write(0,row_num,'recall')
+	train_sheet.write(0,row_num + 1,'precision')
+
+	label_prob_matrix_reduce = matrix_reduce_0(label_prob_matrix)
+	prob_label_matrix_reduce = matrix_reduce_0(prob_label_matrix)
+
+	label_prob_matrix_small_reduce = matrix_reduce_0(label_prob_matrix_small)
+	prob_label_matrix_small_reduce = matrix_reduce_0(prob_label_matrix_small)
+
+	for num,one_name in enumerate(name_list_level):
+		if label_prob_matrix_reduce[one_name] == 0:
+			recall = -1
+		else:
+			recall = label_prob_matrix[one_name][one_name] / label_prob_matrix_reduce[one_name]
+		if prob_label_matrix_reduce[one_name] == 0:
+			precision = -1
+		else:
+			precision = label_prob_matrix[one_name][one_name] / prob_label_matrix_reduce[one_name]
+		train_sheet.write(num + 1,row_num,recall)
+		train_sheet.write(num + 1,row_num + 1,precision)
+		# train_sheet.write(row_num,num + 1,precision)
+	
+	row_num += 2
+	# train_sheet.write(row_num,0,'precision_sum')
+	train_sheet.write(0,row_num,'recall_sum')
+	train_sheet.write(0,row_num + 1,'precision_sum')
+	for num,one_name in enumerate(name_list):
+		if label_prob_matrix_small_reduce[one_name] == 0:
+			recall = -1
+		else:
+			recall = label_prob_matrix_small[one_name][one_name] / label_prob_matrix_small_reduce[one_name]
+		if prob_label_matrix_small_reduce[one_name] == 0:
+			precision = -1
+		else:
+			precision = label_prob_matrix_small[one_name][one_name] / prob_label_matrix_small_reduce[one_name]
+		train_sheet.write(num * 3 + 1,row_num,recall)
+		train_sheet.write(num * 3 + 1,row_num + 1,precision)
+		# train_sheet.write(row_num,num * 3 + 1,precision)
+
+	row_num += 2
+	train_sheet.write(0,row_num,'total_num')
+	for num,one_name in enumerate(name_list_level):	
+		train_sheet.write(num + 1,row_num,label_prob_matrix_reduce[one_name])
+
+	row_num += 1
+	train_sheet.write(0,row_num,'total_num_sum')
+	for num,one_name in enumerate(name_list):	
+		train_sheet.write(num * 3 + 1,row_num,label_prob_matrix_small_reduce[one_name])
+		
+	
+	workbook.save(out_name + '.xlsx')
+
+	# return label_list,prob_list,name_list
+
+
+def eval_confusion_matrix(root_dir,json_file):
+	train_list = get_train_list(json_file)
+	train_set,test_set = get_set(root_dir, train_list)
+
+	get_matrix(root_dir,train_set,'train_matrix')
+	get_matrix(root_dir,test_set,'test_matrix')
+
+
+
 def add_dict(dict_list):
 	if len(dict_list) < 1:
 		return {}
@@ -215,6 +387,28 @@ def eval_level_mixrate(root_dir_list,json_file_list,xml_file = ''):
 	print('test results:')
 	eval_display(sum_test_dict)
 
+
+# def append_dict(str1,str2):
+# 	global confusion_matrix_dict_
+# 	try:
+# 		confusion_matrix_dict_[str1][str2] += 1
+# 	except:
+# 		try:
+# 			confusion_matrix_dict_[str1][str2] = 1
+# 		except:
+# 			confusion_matrix_dict_[str1] = {}
+# 			confusion_matrix_dict_[str1][str2] = 1
+# 	try:
+# 		confusion_matrix_dict_[str2][str1] += 0
+# 	except:
+# 		try:
+# 			confusion_matrix_dict_[str2][str1] = 0
+# 		except:
+# 			confusion_matrix_dict_[str2] = {}
+# 			confusion_matrix_dict_[str2][str1] = 0		
+
+	
+
 	
 if __name__ == '__main__':
 	root_dir_all = 'D:/yang.xie/aidi_projects/update-label0918/reg_cls_all/RegClassify_0'
@@ -233,9 +427,15 @@ if __name__ == '__main__':
 	# print('********************reg_cls_double single*********************')
 	# eval_level_mixrate([root_dir_double,root_dir_single],[json_file_double,json_file_single])
 
-	xml_file = 'D:/yang.xie/workspace/defects.xml'
-	print('********************reg_cls_all*********************')
-	eval_level_mixrate([root_dir_all],[json_file_all],xml_file)
+	# xml_file = 'D:/yang.xie/workspace/defects.xml'
+	# print('********************reg_cls_all*********************')
+	# eval_level_mixrate([root_dir_all],[json_file_all],xml_file)
+
+
+	eval_confusion_matrix(root_dir_all,json_file_all)
+
+
+
 
 
 
