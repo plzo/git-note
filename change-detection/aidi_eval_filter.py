@@ -217,14 +217,16 @@ def get_train_list(json_file):
 	return train_list
 	
 if __name__ == '__main__':
+	# root_dir = 'D:/yang.xie/aidi_projects/update-label0918/reg_cls_all/RegClassify_0'
+	# json_file = root_dir + '/task.json'
+	# train_list = get_train_list(json_file)
+	# eval_aidi_project(root_dir,train_list)
+
 	root_dir = 'D:/yang.xie/aidi_projects/update-label0918/reg_cls_all/RegClassify_0'
 	json_file = root_dir + '/task.json'
 	train_list = get_train_list(json_file)
-	eval_aidi_project(root_dir,train_list)
-
-	# xml_file = 'D:/yang.xie/workspace/defects.xml'
-	# root_dir = 'D:/yang.xie/aidi_projects/update-label0918/reg_cls_all/RegClassify_0'
-	# eval_aidi_filter(root_dir,train_list,xml_file)
+	xml_file = 'D:/yang.xie/workspace/defects.xml'
+	eval_aidi_filter(root_dir,train_list,xml_file)
 
 
 
