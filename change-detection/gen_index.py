@@ -37,11 +37,8 @@ def sort_key(s):
         return int(c)
 
 def script_gen_indexs():
-    root_dir = "D:/yang.xie/aidi_projects/update-label0918"
-    src_dir = root_dir + "/tmp_single_set/source"
-
-    # file_path = root_dir + "/train_indexs.txt"
-    file_path = root_dir + "/tmp_single_set.txt"
+    src_dir = "D:/yang.xie/aidi_projects/project-20201022/训练集/source"
+    file_path = src_dir + "/../train_set.txt"
 
     indexs = _get_indexs(src_dir)
     indexs.sort(key = sort_key )

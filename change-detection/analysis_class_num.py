@@ -28,7 +28,8 @@ if __name__ == '__main__':
 	# label_dir = "D:/yang.xie/aidi_projects/check_class/xbq-b/RegClassify_0/label"
 	# display_json(label_dir)
 
-	label_dir = "D:/yang.xie/aidi_projects/update-label0918/data/数据筛查_json/6通道_fix/label"
+	# label_dir = "D:/yang.xie/aidi_projects/update-label0918/data/数据筛查_json/6通道_fix/label"
+	label_dir = "D:/yang.xie/aidi_projects/update-label0918/reg_cls_double/RegClassify_0/label"
 	display_json(label_dir)
 
 	
