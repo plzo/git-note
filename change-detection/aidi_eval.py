@@ -16,7 +16,8 @@ xml_leval_dict_ = {}
 def get_name_score(one_label_path):
 	in_label = LabelIO()
 	in_label.read_from(one_label_path)
-	json_label = json.loads(in_label.to_json())
+	tmp = in_label.to_json()
+	json_label = json.loads(tmp)
 	return json_label['regions'][0]['name'],json_label['regions'][0]['score']
 
 def get_train_list(json_file):
@@ -53,6 +54,7 @@ def parse_xml(xml_file):
 			xml_leval_dict[defect_name] = -9.
 	return xml_leval_dict
 
+class_type = []
 def check_label_score(label_name,label_score):
 	if label_name == 'OK':
 		return True
@@ -62,8 +64,26 @@ def check_label_score(label_name,label_score):
 		else:
 			return False
 	except:
-		print('new defects type: ',label_name)
+		global class_type
+		if label_name not in class_type:
+			class_type.append(label_name)
+			print('new defects type: ',label_name)
+		return True
 
+def compare_label_small(label_pair,prob_pair):	
+	res1 = ''
+	if len(xml_leval_dict_) > 0:
+		res_label = check_label_score(label_pair['name'],label_pair['score'])
+		res_prob = check_label_score(prob_pair['name'],prob_pair['score'])
+		if res_label and res_prob:
+			res1 = 'ok_ok'
+		elif res_label and not res_prob:
+			res1 = 'ok_ng'
+		elif res_prob and not res_label:
+			res1 = 'ng_ok'
+		else:
+			res1 = 'ng_ng'
+	return res1
 
 def compare_label(label_path,prob_path):
 	label_name,label_score = get_name_score(label_path)
@@ -199,10 +219,15 @@ def get_matrix(root_dir,train_list,out_path):
 		prob_list.append(make_pair(prob_name,prob_score))
 	for (name,num) in name_dict.items():
 		name_list.append(name)
-		
+
+	name_list = sorted(name_list)	
 	name_list_level = list_add_level(name_list)
 	origin_matrix = init_matrix(name_list_level)
 	origin_matrix_small = init_matrix(name_list)
+
+	label_dict = {}
+	for name in name_list:
+		label_dict[name] = 0
 
 	label_prob_matrix = copy.deepcopy(origin_matrix)
 	prob_label_matrix = copy.deepcopy(origin_matrix)
@@ -217,6 +242,9 @@ def get_matrix(root_dir,train_list,out_path):
 
 		label_prob_matrix_small[label_list[i]['name']][prob_list[i]['name']] += 1
 		prob_label_matrix_small[prob_list[i]['name']][label_list[i]['name']] += 1
+
+		if compare_label_small(label_list[i],prob_list[i]) == 'ng_ok':
+			label_dict[label_list[i]['name']] += 1
 
 	workbook = xlwt.Workbook(encoding='utf-8')
 	train_sheet = workbook.add_sheet('sheet 1', cell_overwrite_ok=True)	
@@ -322,13 +350,49 @@ def get_matrix(root_dir,train_list,out_path):
 		train_sheet.write(count + 2,row_num,label_prob_matrix_small_reduce[one_name])
 		train_sheet.write(count + 3,row_num,label_prob_matrix_small_reduce[one_name])
 		count += 3
+
+	row_num += 1
+	train_sheet.write(0,row_num,'miss_num_sum')
+	count = 0
+	for num,one_name in enumerate(name_list):
+		if one_name == 'OK':
+			train_sheet.write(count + 1,row_num,label_dict[one_name])
+			count += 1
+			continue	
+		train_sheet.write(count + 1,row_num,label_dict[one_name])
+		train_sheet.write(count + 2,row_num,label_dict[one_name])
+		train_sheet.write(count + 3,row_num,label_dict[one_name])
+		count += 3
+
+	miss_rate = {}
+	for name in name_list:
+		if label_prob_matrix_small_reduce[name] == 0:
+			miss_rate[name] = 0
+		else:
+			miss_rate[name] = label_dict[name]/label_prob_matrix_small_reduce[name]
+	
+	row_num += 1
+	train_sheet.write(0,row_num,'miss_rate')
+	count = 0
+	for num,one_name in enumerate(name_list):
+		if one_name == 'OK':
+			train_sheet.write(count + 1,row_num,miss_rate[one_name])
+			count += 1
+			continue	
+		train_sheet.write(count + 1,row_num,miss_rate[one_name])
+		train_sheet.write(count + 2,row_num,miss_rate[one_name])
+		train_sheet.write(count + 3,row_num,miss_rate[one_name])
+		count += 3
 	
 	workbook.save(out_path)
 
 	# return label_list,prob_list,name_list
 
 
-def eval_confusion_matrix(root_dir,json_file,out_path):
+def eval_confusion_matrix(root_dir,json_file,out_path,xml_file = ''):
+	global xml_leval_dict_
+	if xml_file != '':
+		xml_leval_dict_ = parse_xml(xml_file)
 	train_list = get_train_list(json_file)
 	train_set,test_set = get_set(root_dir, train_list)
 
@@ -377,30 +441,65 @@ def eval_display(compare_res):
 	# print('漏检率:\n',miss * 100)
 	# print('过检率:\n',over * 100)
 	# print('acc:\n',acc * 100)
+	if (total_num - compare_res['ok_true'] - compare_res['ok_over']) == 0:
+		defect_rc_1 = 0
+	else:
+		defect_rc_1 = (compare_res['diff_true'] + compare_res['same_true']) / (total_num - compare_res['ok_true'] - compare_res['ok_over'])
 
-	defect_rc_1 = (compare_res['diff_true'] + compare_res['same_true']) / (total_num - compare_res['ok_true'] - compare_res['ok_over'])
-	defect_pr_1 = (compare_res['diff_true'] + compare_res['same_true']) / (compare_res['ok_over'] + compare_res['diff_true'] + compare_res['same_true'])
+
+	if (compare_res['ok_over'] + compare_res['diff_true'] + compare_res['same_true']) == 0:
+		defect_pr_1 = 0
+	else:
+		defect_pr_1 = (compare_res['diff_true'] + compare_res['same_true']) / (compare_res['ok_over'] + compare_res['diff_true'] + compare_res['same_true'])
+	
 	print('defect_rc_1:\n',defect_rc_1 * 100)
 	print('defect_pr_1:\n',defect_pr_1 * 100)
-	mix = compare_res['diff_true'] / (compare_res['diff_true'] + compare_res['same_true'])
+
+	if (compare_res['diff_true'] + compare_res['same_true']) == 0:
+		mix = 0
+	else:
+		mix = compare_res['diff_true'] / (compare_res['diff_true'] + compare_res['same_true'])
 	print('混淆率:\n',mix * 100)
 
 	print('*********类型一致 = true，计算指标************')
 
-	defect_rc_2 = (compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true']) / (total_num - compare_res['ok_true'] - compare_res['ok_over'])
-	defect_pr_2 = (compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true']) / (compare_res['ok_over'] + compare_res['ng_miss_diff'] + compare_res['ng_over_diff'] + compare_res['diff_true'] + compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true'])
+	if (total_num - compare_res['ok_true'] - compare_res['ok_over']) == 0:
+		defect_rc_2 = 0
+	else:
+		defect_rc_2 = (compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true']) / (total_num - compare_res['ok_true'] - compare_res['ok_over'])
+	
+	if (compare_res['ok_over'] + compare_res['ng_miss_diff'] + compare_res['ng_over_diff'] + compare_res['diff_true'] + compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true']) == 0:
+		defect_pr_2 = 0
+	else:
+		defect_pr_2 = (compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true']) / (compare_res['ok_over'] + compare_res['ng_miss_diff'] + compare_res['ng_over_diff'] + compare_res['diff_true'] + compare_res['ng_miss_same'] + compare_res['ng_over_same'] + compare_res['same_true'])
+	
 	print('defect_rc_2:\n',defect_rc_2 * 100)
 	print('defect_pr_2:\n',defect_pr_2 * 100)
 
 
 	print('*********程度相等 且 类型一致 = true，计算指标************')
-	defect_rc_3 = compare_res['same_true'] / (total_num - compare_res['ok_true'] - compare_res['ok_over'])
-	defect_pr_3 = compare_res['same_true'] / (compare_res['ok_over'] + compare_res['diff_true'] + compare_res['same_true'])
+
+	if (total_num - compare_res['ok_true'] - compare_res['ok_over']) == 0:
+		defect_rc_3 = 0
+	else:
+		defect_rc_3 = compare_res['same_true'] / (total_num - compare_res['ok_true'] - compare_res['ok_over'])
+	
+
+	if (compare_res['ok_over'] + compare_res['diff_true'] + compare_res['same_true']) == 0:
+		defect_pr_3 = 0
+	else:
+		defect_pr_3 = compare_res['same_true'] / (compare_res['ok_over'] + compare_res['diff_true'] + compare_res['same_true'])
+	
 	print('defect_rc_3:\n',defect_rc_3 * 100)
 	print('defect_pr_3:\n',defect_pr_3 * 100)
 
 	print('*********其他**********')
-	aidi_acc = (compare_res['ok_true'] + compare_res['same_true'] + compare_res['ng_miss_same'] + compare_res['ng_over_same']) / total_num
+
+	if total_num == 0:
+		aidi_acc = 0
+	else:
+		aidi_acc = (compare_res['ok_true'] + compare_res['same_true'] + compare_res['ng_miss_same'] + compare_res['ng_over_same']) / total_num
+	
 	print('aidi_acc:\n',aidi_acc * 100)
 	print('total_num:\n',total_num)
 
@@ -537,13 +636,30 @@ if __name__ == '__main__':
 	# eval_level_mixrate([root_dir_double,root_dir_single],[json_file_double,json_file_single])
 
 
-	out_path = 'D:/yang.xie/data/数据分析/base_project'
-	root_dir_all = 'D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0'
+	# out_path = 'D:/yang.xie/data/数据分析/5_cls'
+	# root_dir_all = 'D:/yang.xie/aidi_projects/project-20201022/5_cls/RegClassify_0'
+
+	# out_path = 'D:/yang.xie/data/数据分析/cls-seg-v1-seg2'
+	# root_dir_all = 'D:/yang.xie/aidi_projects/cls-seg20201027/base_project_copy/RegClassify_0'	
+	# xml_file = root_dir_all + '/defects_filter.xml'
+
+	# out_path = 'D:/yang.xie/data/数据分析/shennan_cls'
+	# root_dir_all = 'D:/yang.xie/aidi_projects/shennan1107/1105-2C/RegClassify_0'	
+	# xml_file = ''
+
+	# out_path = 'D:/yang.xie/data/数据分析/shennan_cls_seg_reset_v0'
+	# root_dir_all = 'D:/yang.xie/aidi_projects/shennan1107/seg_cls/RegClassify_0'	
+	# xml_file = ''
+
+
+	out_path = 'D:/yang.xie/data/数据分析/base_project_develop_v2'
+	root_dir_all = 'D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0'	
+	xml_file = root_dir_all + '/defects_filter.xml'
+	
+	
 
 	json_file_all = root_dir_all + '/task.json'
-	xml_file = root_dir_all + '/defects_filter.xml'
-
-	eval_confusion_matrix(root_dir_all,json_file_all,out_path)
+	eval_confusion_matrix(root_dir_all,json_file_all,out_path,xml_file)
 	print('start eval_level_mixrate... ')
 	eval_level_mixrate([root_dir_all],[json_file_all],out_path,xml_file)
 

@@ -21,30 +21,22 @@ def display_aqlabel(aqlabel_dir):
 			class_dict[class_name] = 1
 		else:
 			class_dict[class_name] += 1
+
+	class_list = sorted(class_list)
 	for one_name in class_list:
 		print(one_name,class_dict[one_name])
 	for one_name in class_list:
 		print(class_dict[one_name])
 	
-	list_for_data_info = []
-	for one_name in class_list:
-		print('"' + one_name + '" ,')
+	# list_for_data_info = []
+	# for one_name in class_list:
+	# 	print('"' + one_name + '" ,')
 		
 
 if __name__ == '__main__':
 	# label_dir = "D:/yang.xie/aidi_projects/update-label0918/reg_cls_all/RegClassify_0/label"
-	label_dir = "D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0/label"
+	# label_dir = "D:/yang.xie/aidi_projects/project-20201022/classify_no_reg/Classify_0/label"
 	
+	# label_dir = "D:/yang.xie/aidi_projects/cls-seg20201027/base_project/RegClassify_0/label"
+	label_dir = "D:/yang.xie/aidi_projects/cls-seg20201027/data/processed/label_seg_cls_train"
 	display_aqlabel(label_dir)
-
-	
-
-
-
-
-
-
-					
-
-
-

@@ -40,6 +40,19 @@ train -p ./algo --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\aidi_tas
 infer -p ./algo --auth=1099aaf7-cec3-11e9-ad13-525400162223 F:\yang.xie\aidi_tasks\boxdetector_410\task.json    #150
 infer -p ./algo --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\aidi_tasks\boxdetector_410\task.json    #151
 
+train -p ./algo --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_tasks\shennan20201019\task.json    #151
+train -p ./algo --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_tasks\shennan20201019_big2000\task.json 
+
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_tasks\split_reg_cls\task.json
+infer -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_tasks\split_reg_cls\task.json
+templ -p . --module=RegClassify --type=train --file=D:\yang.xie\aidi_tasks\split_reg_cls\model\train.json
+
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_tasks\classify_410\task.json
+
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\project-20201022\base_project\RegClassify_0\task.json
+
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:/yang.xie/aidi_projects/project-20201022/classify_no_reg/Classify_0\task.json
+
 ```
 ## train 400
 ```
@@ -57,6 +70,8 @@ eval F:\yang.xie\aidi\cd_newbase\210r_A4\Segment_0\task.json
 view F:\yang.xie\data\luyan\label\1.aqlabel
 view F:\yang.xie\data\luyan\label\1.aqlabel --idx=0
 view -f json F:\yang.xie\aidi\label0725\label0725_test\Segment_0\label\1.aqlabel
+
+view -f json D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0/test_result/10.aqlabel
 ```
 
 
@@ -66,3 +81,4 @@ train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects
 train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all_2class\RegClassify_0\task.json
 train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_double_2class\RegClassify_0\task.json
 
+infer -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all\RegClassify_0\task.json
