@@ -5,6 +5,7 @@ import json
 import random
 import copy
 import xlwt
+import sqlite3
 from xlwt import *
 sys.path.insert(0,'D:/yang.xie/packages')
 from aidi410_label.aidi_vision import *
@@ -611,7 +612,12 @@ def eval_level_mixrate(root_dir_list,json_file_list,out_path,xml_file = ''):
 # 			confusion_matrix_dict_[str2][str1] = 0		
 
 	
-
+def get_train_list(db_file):
+    with sqlite3.connect(db_file) as conn:
+        c = conn.cursor()
+        cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 2")
+        train_list = [row[0] for row in cursor]
+        return train_list
 	
 if __name__ == '__main__':
 	# project_name = 'reg_cls_tmp2'
@@ -652,8 +658,12 @@ if __name__ == '__main__':
 	# xml_file = ''
 
 
-	out_path = 'D:/yang.xie/data/数据分析/base_project_develop_v2'
-	root_dir_all = 'D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0'	
+	# out_path = 'D:/yang.xie/data/数据分析/base_project_develop_v2'
+	# root_dir_all = 'D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0'	
+	# xml_file = root_dir_all + '/defects_filter.xml'
+
+	out_path = 'D:/yang.xie/data/数据分析/iter04_v1'
+	root_dir_all = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/RegClassify_0'	
 	xml_file = root_dir_all + '/defects_filter.xml'
 	
 	
@@ -662,6 +672,8 @@ if __name__ == '__main__':
 	eval_confusion_matrix(root_dir_all,json_file_all,out_path,xml_file)
 	print('start eval_level_mixrate... ')
 	eval_level_mixrate([root_dir_all],[json_file_all],out_path,xml_file)
+
+	# print(get_train_list(r'D:\yang.xie\aidi_projects\20201117-iteration4\channel3\channel3.db'))
 
 
 

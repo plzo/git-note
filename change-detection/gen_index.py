@@ -37,7 +37,7 @@ def sort_key(s):
         return int(c)
 
 def script_gen_indexs():
-    src_dir = "D:\\yang.xie\\aidi_projects\\shennan1107\\label_combine_2\\huiguifenge\\train_set\\source"
+    src_dir = "D:/yang.xie/aidi_projects/20201117-iteration4/iter04/train_set/source"
     file_path = src_dir + "/../train_set.txt"
 
     indexs = _get_indexs(src_dir)
