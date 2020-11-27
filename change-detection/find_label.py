@@ -16,9 +16,9 @@ if __name__ == '__main__':
 	# source_dir = 'D:/yang.xie/aidi_projects/project-20201022/5_cls/RegClassify_0/source'
 	# label_src = 'D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify_0/label'
 	# label_dst = 'D:/yang.xie/aidi_projects/project-20201022/5_cls/RegClassify_0/label'
-
-	source_dir = 'D:/yang.xie/aidi_projects/cls-seg20201027/data/cd_big_set/Segment_0/source'
-	label_src = 'D:/yang.xie/aidi_projects/cls-seg20201027/data/label_aqlabel_classify'
-	label_dst = 'D:/yang.xie/aidi_projects/cls-seg20201027/data/处理好的数据/label_cls'
+	
+	source_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/train_set/source'
+	label_src = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/RegClassify_0/label'
+	label_dst = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/train_set/label'
 	find_label(source_dir, label_src, label_dst)
 

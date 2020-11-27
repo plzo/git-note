@@ -112,6 +112,7 @@ class eval_tools():
 	def set_eval_set(self,eval_set):
 		self.eval_set = eval_set
 		self.init_data()
+		
 
 	def init_data(self):
 		self.name_list, self.pair_list = self.get_name_score_list()
@@ -151,9 +152,15 @@ class eval_tools():
 		with sqlite3.connect(db_file) as conn:
 			c = conn.cursor()
 			if self.eval_set == 'train':
-				cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 1")
+				try:
+					cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 1")
+				except:
+					cursor = c.execute("SELECT id FROM Classify_0 WHERE selected == 1")
 			else:
-				cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 2")
+				try:
+					cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 2")
+				except:
+					cursor = c.execute("SELECT id FROM Classify_0 WHERE selected == 2")
 			self.set_list = [row[0] for row in cursor]
 
 	def get_label_suffix(self):
@@ -174,14 +181,14 @@ class eval_tools():
 			res_dict[name_row] = tmp_dict
 		return res_dict
 
-	def get_result(self,tp = 'pr'):
+	def get_result(self,tp = 'rc'):
 		result = []
 		if self.add_level:
 			name_list = self.name_level_list
 		else:
 			name_list = self.name_list
 
-		if tp == 'pr':
+		if tp == 'rc':
 			reduce_matrix = self.reduce_matrix_row
 		else:
 			reduce_matrix = self.reduce_matrix_col
@@ -255,7 +262,16 @@ class eval_tools():
 			else:
 				return False
 		except:
-			global class_type
+			# try:
+			# 	if label_score < self.xml_level_dict[label_name.split('_')[0]]:
+			# 		return True
+			# 	else:
+			# 		return False
+			# except:
+			if self.add_level:
+				class_type = self.name_level_list
+			else:
+				class_type = self.name_list
 			if label_name not in class_type:
 				class_type.append(label_name)
 				print('new defects type: ',label_name)
@@ -284,6 +300,12 @@ class eval_tools():
 			return 3
 
 	def compare_label(self,label_pair,prob_pair):
+		if self.add_level:
+			label_score = self.get_level(label_pair['score'])
+			prob_score = self.get_level(prob_pair['score'])
+		else:
+			label_score = 0.5
+			prob_score = 0.5
 		if label_pair['name'] == 'OK' and prob_pair['name'] == 'OK':
 			return 'ok_true'
 		elif label_pair['name'] == 'OK' and prob_pair['name'] != 'OK':
@@ -291,12 +313,12 @@ class eval_tools():
 		elif label_pair['name'] != 'OK' and prob_pair['name'] == 'OK':
 			return 'ok_miss'
 		else:
-			if self.get_level(label_pair['score']) > self.get_level(prob_pair['score']):
+			if label_score > prob_score:
 				if label_pair['name'] == prob_pair['name']:
 					return 'ng_miss_same'
 				else:
 					return 'ng_miss_diff'
-			elif self.get_level(prob_pair['score']) > self.get_level(label_pair['score']):
+			elif prob_score > label_score:
 				if label_pair['name'] == prob_pair['name']:
 					return 'ng_over_same'
 				else:
@@ -368,7 +390,6 @@ class eval_tools():
 		self.tool.save()
 	
 	def calcu_one_result(self,sheet_name,add_level = False):
-		self.set_add_level(add_level)
 		if add_level:
 			self.set_add_level(True)	
 			self.matrix = self.get_matrix()
@@ -377,41 +398,47 @@ class eval_tools():
 			matrix_len = len(self.matrix)
 			
 			self.tool.draw_matrix(sheet_name,0,0,self.matrix,self.name_level_list)
-			self.tool.draw_col(sheet_name,0,matrix_len,['细分精度'])
-			self.tool.draw_col(sheet_name,1,matrix_len,self.get_result('pr'))
-
-			self.tool.draw_col(sheet_name,0,matrix_len + 1,['细分召回'])
+			self.tool.draw_col(sheet_name,0,matrix_len + 1,['细分精度'])
 			self.tool.draw_col(sheet_name,1,matrix_len + 1,self.get_result('pr'))
 
-			self.tool.draw_col(sheet_name,0,matrix_len + 2,['细分总数'])
-			self.tool.draw_col(sheet_name,1,matrix_len + 2,self.get_total_num())
+			self.tool.draw_col(sheet_name,0,matrix_len + 2,['细分召回'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 2,self.get_result('rc'))
+
+			self.tool.draw_col(sheet_name,0,matrix_len + 3,['细分总数'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 3,self.get_total_num())
 
 			self.set_add_level(False)	
 			self.matrix = self.get_matrix()
 			self.reduce_matrix_row = self.get_matrix_reduce()
 			self.reduce_matrix_col = self.get_matrix_reduce(False)
 
-			self.tool.draw_col(sheet_name,0,matrix_len + 3,['单类精度'])
-			self.tool.draw_col(sheet_name,1,matrix_len + 3,self.copy_list(self.get_result('pr')))
-
-			self.tool.draw_col(sheet_name,0,matrix_len + 4,['单类召回'])
+			self.tool.draw_col(sheet_name,0,matrix_len + 4,['单类精度'])
 			self.tool.draw_col(sheet_name,1,matrix_len + 4,self.copy_list(self.get_result('pr')))
 
-			total_num = self.get_total_num()
-			self.tool.draw_col(sheet_name,0,matrix_len + 5,['单类总数'])
-			self.tool.draw_col(sheet_name,1,matrix_len + 5,self.copy_list(total_num))
+			self.tool.draw_col(sheet_name,0,matrix_len + 5,['单类召回'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 5,self.copy_list(self.get_result('rc')))
 
+			total_num = self.get_total_num()
+			self.tool.draw_col(sheet_name,0,matrix_len + 6,['单类总数'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 6,self.copy_list(total_num))
+
+			self.set_add_level(True)
 			self.compare()
+			index_num = 7
 			if self.have_xml:
+				index_num += 2
 				miss_num = self.get_miss_num()
 				miss_rate = []
 				for index,num in enumerate(total_num):
 					miss_rate.append(self.divide(miss_num[index],total_num[index]))		
-				self.tool.draw_col(sheet_name,0,matrix_len + 6,['漏检数'])
-				self.tool.draw_col(sheet_name,1,matrix_len + 6,self.copy_list(miss_num))
+				self.tool.draw_col(sheet_name,0,matrix_len + 7,['漏检数'])
+				self.tool.draw_col(sheet_name,1,matrix_len + 7,self.copy_list(miss_num))
 
-				self.tool.draw_col(sheet_name,0,matrix_len + 7,['漏检率'])
-				self.tool.draw_col(sheet_name,1,matrix_len + 7,self.copy_list(miss_rate))
+				self.tool.draw_col(sheet_name,0,matrix_len + 8,['漏检率'])
+				self.tool.draw_col(sheet_name,1,matrix_len + 8,self.copy_list(miss_rate))
+
+			self.tool.draw_col(sheet_name,0,matrix_len + index_num,['排序号'])
+			self.tool.draw_col(sheet_name,1,matrix_len + index_num,[i for i in range(matrix_len)])
 
 		else:
 			self.set_add_level(False)	
@@ -421,14 +448,17 @@ class eval_tools():
 			matrix_len = len(self.matrix)
 			
 			self.tool.draw_matrix(sheet_name,0,0,self.matrix,self.name_list)
-			self.tool.draw_col(sheet_name,0,matrix_len,['程度精度'])
-			self.tool.draw_col(sheet_name,1,matrix_len,self.get_result('pr'))
-
-			self.tool.draw_col(sheet_name,0,matrix_len + 1,['程度召回'])
+			self.tool.draw_col(sheet_name,0,matrix_len + 1,['精度'])
 			self.tool.draw_col(sheet_name,1,matrix_len + 1,self.get_result('pr'))
 
-			self.tool.draw_col(sheet_name,0,matrix_len + 2,['程度总数'])
-			self.tool.draw_col(sheet_name,1,matrix_len + 2,self.get_total_num())
+			self.tool.draw_col(sheet_name,0,matrix_len + 2,['召回'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 2,self.get_result('rc'))
+
+			self.tool.draw_col(sheet_name,0,matrix_len + 3,['总数'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 3,self.get_total_num())
+
+			self.tool.draw_col(sheet_name,0,matrix_len + 4,['排序号'])
+			self.tool.draw_col(sheet_name,1,matrix_len + 4,[i for i in range(matrix_len)])
 			self.compare()
 
 
@@ -468,7 +498,7 @@ class eval_tools():
 			flag = True
 			for (name_row, dict_tmp) in self.matrix.items():
 				if flag:
-					matrix_reduce = dict_tmp
+					matrix_reduce =  copy.deepcopy(dict_tmp)
 					flag = False
 					continue
 				else:
@@ -502,6 +532,18 @@ class eval_tools():
 		one_data['name'] = label_name
 		one_data['score'] = label_score
 		return one_data
+	
+	def trans_name(self,label_name,score):
+		split_name = label_name.split('_')
+		if len(split_name) > 1:
+			if split_name[1] == '轻度':
+				return self.make_pair(split_name[0],0.3)
+			elif split_name[1] == '中度':
+				return self.make_pair(split_name[0],0.6)
+			else:
+				return self.make_pair(split_name[0],0.9)
+		else:
+			return self.make_pair(label_name, score)
 
 	def get_name_score_list(self):
 		self.get_list()
@@ -516,18 +558,25 @@ class eval_tools():
 			label_name, label_score = self.get_name_score(label_path)
 			prob_name, prob_score = self.get_name_score(prob_path)
 
-			if label_name not in name_list:
-				name_list.append(label_name)
+			split_label_name = label_name.split('_')
+			split_prob_name = prob_name.split('_')
+			if split_label_name[0] not in name_list:
+				name_list.append(split_label_name[0])
+			if split_prob_name[0] not in name_list:
+				name_list.append(split_prob_name[0])
 
-			one_pair['label'] = self.make_pair(label_name,label_score)
-			one_pair['prob'] = self.make_pair(prob_name,prob_score)
+			one_pair['label'] = self.trans_name(label_name,label_score)
+			one_pair['prob'] = self.trans_name(prob_name,prob_score)
 			pair_list.append(one_pair)
 		return name_list,pair_list
 
 		
 if __name__ == '__main__':
-	out_path = 'D:/yang.xie/data/数据分析/new_test_v1.xlsx'
-	root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/RegClassify_0'	
+	out_path = 'D:/yang.xie/data/数据分析/classify_no_reg_3level_v3.xlsx'
+	# out_path = 'D:/yang.xie/data/数据分析/classify_iter04_v1.xlsx'
+	# root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/RegClassify_0'	
+	root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/classify_no_reg_3level/Classify_0'	
+	
 	eval_set = eval_tools(root_dir,out_path)
 	eval_set.save_result(True)
 		

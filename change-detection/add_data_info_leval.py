@@ -21,7 +21,7 @@ def add_level(data_info_json_path):
 
 
 if __name__ == '__main__':
-	json_path = "D:/yang.xie/aidi_projects/project-20201022/classify_no_reg/Classify_0/dataset_info.json"
+	json_path = "D:/yang.xie/aidi_projects/20201117-iteration4/classify_no_reg_3level/Classify_0/dataset_info.json"
 	add_level(json_path)
 		
 
