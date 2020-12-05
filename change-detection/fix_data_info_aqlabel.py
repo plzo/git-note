@@ -36,7 +36,7 @@ def fix_data_info_aqlabel(project_dir):
 	json.dump(data_info_json_dict, open(project_dir + '/dataset_info.json', 'w',encoding='UTF-8'),ensure_ascii=False)
 	
 if __name__ == '__main__':
-	project_dir = 'D:/yang.xie/aidi_projects/cls-seg20201027/base_project/RegClassify_0'
+	project_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\cls\Classify_0'
 	fix_data_info_aqlabel(project_dir)
 
 

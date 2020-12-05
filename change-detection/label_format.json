@@ -1,0 +1,256 @@
+{
+    "dataset_type": "Classify",
+    "img_size": {
+        "width": 128,
+        "height": 128
+    },
+    "name": "",
+    "score": 0,
+    "regions": [
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 0,
+                            "y": 0
+                        },
+                        {
+                            "x": 0,
+                            "y": 128
+                        },
+                        {
+                            "x": 128,
+                            "y": 128
+                        },
+                        {
+                            "x": 128,
+                            "y": 0
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "鐒婄洏鍑歌捣鍑归櫡",
+            "score": 0.9,
+            "key_points": [],
+            "ext_info": {}
+        }
+    ],
+    "masks": [],
+    "hardcases": [],
+    "ext_info": {}
+}
+
+{
+    "dataset_type": "Detection",
+    "img_size": {
+        "width": 128,
+        "height": 128
+    },
+    "name": "",
+    "score": 1.54277702e-011,
+    "regions": [
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 106,
+                            "y": 56
+                        },
+                        {
+                            "x": 106,
+                            "y": 65
+                        },
+                        {
+                            "x": 112,
+                            "y": 65
+                        },
+                        {
+                            "x": 112,
+                            "y": 56
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "defects",
+            "score": -1.18310563e-005,
+            "key_points": [],
+            "ext_info": {}
+        },
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 69,
+                            "y": 55
+                        },
+                        {
+                            "x": 69,
+                            "y": 64
+                        },
+                        {
+                            "x": 76,
+                            "y": 64
+                        },
+                        {
+                            "x": 76,
+                            "y": 55
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "defects",
+            "score": -1.18310563e-005,
+            "key_points": [],
+            "ext_info": {}
+        }
+    ],
+    "masks": [],
+    "hardcases": [],
+    "origin_result": {},
+    "ext_info": {}
+}
+
+{
+    "dataset_type": "Location",
+    "img_size": {
+        "width": 128,
+        "height": 128
+    },
+    "name": "",
+    "score": -2.35823759e+010,
+    "regions": [
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": -23.224577,
+                            "y": 55.9491501
+                        },
+                        {
+                            "x": -23.224577,
+                            "y": 135.949158
+                        },
+                        {
+                            "x": 56.7754211,
+                            "y": 135.949158
+                        },
+                        {
+                            "x": 56.7754211,
+                            "y": 55.9491501
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "defect",
+            "score": "NaN",
+            "key_points": [
+                {
+                    "location": {
+                        "x": 16.775423,
+                        "y": 95.9491501
+                    },
+                    "name": "defect",
+                    "score": 0,
+                    "angle": -1,
+                    "radius": -1,
+                    "ext_info": {}
+                }
+            ],
+            "ext_info": {}
+        },
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 45.6016922,
+                            "y": 35.0974579
+                        },
+                        {
+                            "x": 45.6016922,
+                            "y": 115.097458
+                        },
+                        {
+                            "x": 125.601692,
+                            "y": 115.097458
+                        },
+                        {
+                            "x": 125.601692,
+                            "y": 35.0974579
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "defect",
+            "score": "NaN",
+            "key_points": [
+                {
+                    "location": {
+                        "x": 85.6016922,
+                        "y": 75.0974579
+                    },
+                    "name": "defect",
+                    "score": 0,
+                    "angle": -1,
+                    "radius": -1,
+                    "ext_info": {}
+                }
+            ],
+            "ext_info": {}
+        },
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": -12.7203388,
+                            "y": -12.5635586
+                        },
+                        {
+                            "x": -12.7203388,
+                            "y": 67.4364395
+                        },
+                        {
+                            "x": 67.2796631,
+                            "y": 67.4364395
+                        },
+                        {
+                            "x": 67.2796631,
+                            "y": -12.5635586
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "defect",
+            "score": "NaN",
+            "key_points": [
+                {
+                    "location": {
+                        "x": 27.2796612,
+                        "y": 27.4364414
+                    },
+                    "name": "defect",
+                    "score": 0,
+                    "angle": -1,
+                    "radius": -1,
+                    "ext_info": {}
+                }
+            ],
+            "ext_info": {}
+        }
+    ],
+    "masks": [],
+    "hardcases": [],
+    "origin_result": {},
+    "ext_info": {}
+}

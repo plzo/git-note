@@ -347,23 +347,23 @@ class eval_tools():
 		for (name,num) in raw_global_result.items():
 			total_num += num
 		self.global_result['总数据量'] = total_num
-		self.global_result['程度精度'] = self.divide(raw_global_result['diff_true'] + raw_global_result['same_true'],raw_global_result['ok_over'] + raw_global_result['diff_true'] + raw_global_result['same_true'])
-		self.global_result['程度召回'] = self.divide(raw_global_result['diff_true'] + raw_global_result['same_true'],total_num - raw_global_result['ok_true'] - raw_global_result['ok_over'])
-		self.global_result['混淆率'] = self.divide(raw_global_result['diff_true'],raw_global_result['diff_true'] + raw_global_result['same_true'])
+		self.global_result['aidi指标'] = self.divide(raw_global_result['ok_true'] + raw_global_result['same_true'] + raw_global_result['ng_miss_same'] + raw_global_result['ng_over_same'],total_num)
 		self.global_result['类型精度'] = self.divide(raw_global_result['ng_miss_same'] + raw_global_result['ng_over_same'] + raw_global_result['same_true'],raw_global_result['ok_over'] + raw_global_result['ng_miss_diff'] + raw_global_result['ng_over_diff'] + raw_global_result['diff_true'] + raw_global_result['ng_miss_same'] + raw_global_result['ng_over_same'] + raw_global_result['same_true'])
 		self.global_result['类型召回'] = self.divide(raw_global_result['ng_miss_same'] + raw_global_result['ng_over_same'] + raw_global_result['same_true'],total_num - raw_global_result['ok_true'] - raw_global_result['ok_over'])
-		self.global_result['程度类型精度'] = self.divide(raw_global_result['same_true'],raw_global_result['ok_over'] + raw_global_result['diff_true'] + raw_global_result['same_true'])
-		self.global_result['程度类型召回'] = self.divide(raw_global_result['same_true'],total_num - raw_global_result['ok_true'] - raw_global_result['ok_over'])
-		self.global_result['aidi指标'] = self.divide(raw_global_result['ok_true'] + raw_global_result['same_true'] + raw_global_result['ng_miss_same'] + raw_global_result['ng_over_same'],total_num)
-		
-		if self.have_xml:
-			self.global_result['现场缺陷精度'] = self.divide(raw_global_result_xml['ng_ng'],raw_global_result_xml['ng_ng'] + raw_global_result_xml['ok_ng'])
-			self.global_result['现场缺陷召回'] = self.divide(raw_global_result_xml['ng_ng'],raw_global_result_xml['ng_ng'] + raw_global_result_xml['ng_ok'])
-			self.global_result['现场ok精度'] = self.divide(raw_global_result_xml['ok_ok'],raw_global_result_xml['ok_ok'] + raw_global_result_xml['ng_ok'])
-			self.global_result['现场ok召回'] = self.divide(raw_global_result_xml['ok_ok'],raw_global_result_xml['ok_ok'] + raw_global_result_xml['ok_ng'])
-			self.global_result['现场缺陷原始数'] = total_num - raw_global_result['ok_true'] - raw_global_result['ok_over']
-			self.global_result['现场缺陷过滤数'] = raw_global_result_xml['ng_ng'] + raw_global_result_xml['ng_ok']
-		
+		if self.add_level:
+			self.global_result['程度精度'] = self.divide(raw_global_result['diff_true'] + raw_global_result['same_true'],raw_global_result['ok_over'] + raw_global_result['diff_true'] + raw_global_result['same_true'])
+			self.global_result['程度召回'] = self.divide(raw_global_result['diff_true'] + raw_global_result['same_true'],total_num - raw_global_result['ok_true'] - raw_global_result['ok_over'])
+			self.global_result['混淆率'] = self.divide(raw_global_result['diff_true'],raw_global_result['diff_true'] + raw_global_result['same_true'])
+			self.global_result['程度类型精度'] = self.divide(raw_global_result['same_true'],raw_global_result['ok_over'] + raw_global_result['diff_true'] + raw_global_result['same_true'])
+			self.global_result['程度类型召回'] = self.divide(raw_global_result['same_true'],total_num - raw_global_result['ok_true'] - raw_global_result['ok_over'])
+			if self.have_xml:
+				self.global_result['现场缺陷精度'] = self.divide(raw_global_result_xml['ng_ng'],raw_global_result_xml['ng_ng'] + raw_global_result_xml['ok_ng'])
+				self.global_result['现场缺陷召回'] = self.divide(raw_global_result_xml['ng_ng'],raw_global_result_xml['ng_ng'] + raw_global_result_xml['ng_ok'])
+				self.global_result['现场ok精度'] = self.divide(raw_global_result_xml['ok_ok'],raw_global_result_xml['ok_ok'] + raw_global_result_xml['ng_ok'])
+				self.global_result['现场ok召回'] = self.divide(raw_global_result_xml['ok_ok'],raw_global_result_xml['ok_ok'] + raw_global_result_xml['ok_ng'])
+				self.global_result['现场缺陷原始数'] = total_num - raw_global_result['ok_true'] - raw_global_result['ok_over']
+				self.global_result['现场缺陷过滤数'] = raw_global_result_xml['ng_ng'] + raw_global_result_xml['ng_ok']
+			
 		for (name,value) in self.global_result.items():
 			self.global_result_name.append(name)
 			self.global_result_value.append(value)
@@ -572,11 +572,12 @@ class eval_tools():
 
 		
 if __name__ == '__main__':
-	out_path = 'D:/yang.xie/data/数据分析/classify_no_reg_3level_v3.xlsx'
-	# out_path = 'D:/yang.xie/data/数据分析/classify_iter04_v1.xlsx'
-	# root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/iter04/RegClassify_0'	
-	root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/classify_no_reg_3level/Classify_0'	
+	# out_path = 'D:/yang.xie/data/数据分析/channel3.xlsx'
+	# root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/channel3/RegClassify_0'
+
+	out_path = 'D:/yang.xie/data/数据分析/classify_30_sok.xlsx'
+	root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/classify_30_sok/Classify_0'	
 	
 	eval_set = eval_tools(root_dir,out_path)
-	eval_set.save_result(True)
+	eval_set.save_result(False)
 		

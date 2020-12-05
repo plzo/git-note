@@ -10,6 +10,7 @@ def get_name_score(one_label_path):
 	in_label.read_from(one_label_path)
 	json_label = json.loads(in_label.to_json())
 	name_score_list = []
+	name_score_list.append({'select_name':json_label['regions'][0]['name'],'score':json_label['regions'][0]['score']})
 	for one_point in json_label['regions'][0]['key_points']:
 		one_dict = {}
 		one_dict['name'] = one_point['name']
@@ -27,12 +28,15 @@ if __name__=="__main__":
 	sum_score_abs = 0
 	count = 0
 	for one_name_score in name_score_list:
-		if count < 4:
-			print(one_name_score['name'],': ',one_name_score['score'])
-		sum_score += one_name_score['score']
-		if one_name_score['score'] > 0:
-			sum_score_abs += one_name_score['score']
-		count += 1
+		try:
+			if count < 4:
+				print(one_name_score['name'],': ',one_name_score['score'])
+			sum_score += one_name_score['score']
+			if one_name_score['score'] > 0:
+				sum_score_abs += one_name_score['score']
+			count += 1
+		except:
+			print(one_name_score['select_name'],': ',one_name_score['score'])
 	# print('total score minus: ',sum_score)
 	print('total score: ',sum_score_abs)
 
