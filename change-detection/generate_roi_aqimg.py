@@ -89,14 +89,14 @@ def generate_aqimg_roi(aqimg_roi_dir,aqimg_dir,label_dir = ''):
 
 
 if __name__ == '__main__':
-    label_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\label'
-    aqimg_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\source'
-    aqimg_roi_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\source_roi'
+    label_dir = r'D:\yang.xie\aidi_projects\20201222-rgbhs\generate_label\Detection_0\label'
+    aqimg_dir = r'D:\yang.xie\aidi_projects\20201222-rgbhs\generate_label\Detection_0\source'
+    aqimg_roi_dir = r'D:\yang.xie\aidi_projects\20201222-rgbhs\generate_label\Detection_0\source_roi'
     
     aqimg_ok_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\source_ok'
     aqimg_ok_roi_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\source_ok_roi'
 
-    # generate_aqimg_roi(aqimg_roi_dir,aqimg_dir,label_dir)
+    generate_aqimg_roi(aqimg_roi_dir,aqimg_dir,label_dir)
     # generate_aqimg_roi(aqimg_ok_roi_dir,aqimg_ok_dir)
 
 

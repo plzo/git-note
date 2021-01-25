@@ -45,8 +45,10 @@ def update_task(project_dir):
 	tmp_dict = task_json_dict
 	json.dump(tmp_dict, open(project_dir + '/task_bak.json', 'w',encoding='UTF-8'),ensure_ascii=False)
 	train_set = get_list(project_dir,'train')
-	task_json_dict['indexes']['value'] = train_set
-	task_json_dict['model_version']['value'] = 'M1'
+	test_set = get_list(project_dir,'test')
+	all_set = train_set + test_set
+	task_json_dict['indexes']['value'] = all_set
+	task_json_dict['model_version']['value'] = 'V1'
 	task_json_dict['module_type']['value'] = 'Classify'
 	task_json_dict['root_path']['value'] = project_dir
 	json.dump(task_json_dict, open(project_dir + '/task.json', 'w',encoding='UTF-8'),ensure_ascii=False)
@@ -55,7 +57,7 @@ def update_task(project_dir):
 	
 if __name__ == '__main__':
 
-	project_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\cls\Classify_0'
+	project_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls\Classify_0'
 	update_task(project_dir)
 		
 

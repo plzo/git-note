@@ -51,13 +51,11 @@ def change_label2(project_dir,one_label,save_path):
 	# img_path = 'D:/yang.xie/aidi_projects/project-20201022/classify_no_reg/Classify_0/source/1.aqimg'
 
 	json_path = project_dir + '/tmp.json'
-	img_path = project_dir + '/source/' + one_label.split('.')[0] + '.aqimg'
+	img_path = project_dir + '/source/' + one_label.split('.')[0] + '.png'
 	src_label_path = project_dir + '/label/' + one_label
 
-	print(json_path)
-
 	name,score = get_name_score(src_label_path)
-	name = trans_name(name,score)
+	# name = trans_name(name,score)
 	json_dict = [{'label':name,'score':score}]
 	json.dump(json_dict, open(json_path, 'w',encoding='UTF-8'),ensure_ascii=False)
 
@@ -78,6 +76,7 @@ def change_dir(project_dir):
 
 
 if __name__ == '__main__':
-	label_path = 'D:/yang.xie/aidi_projects/20201117-iteration4/classify_no_reg_3level/Classify_0'
+	label_path = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls3\Classify_0'
 	change_dir(label_path)
+	# change_label('D:\yang.xie\1.aqlabel')
 

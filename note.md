@@ -41,6 +41,18 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 link_directories(${OpenCV_LIBRARY_DIRS})
 add_definitions(${OpenCV_DEFINITIONS})
 
+# OpenCV 3
+set(OpenCV_DIRS "D:/aidi_libs/420-vs2017/opencv3.3.4.11")
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+    set(OpenCV_LIBRARY_DIRS ${OpenCV_DIRS}/build/Debug/x64)
+	set(OpenCV_LIBS "opencv_world3411d.lib")
+else()
+    set(OpenCV_LIBRARY_DIRS ${OpenCV_DIRS}/build/Release/x64)
+	set(OpenCV_LIBS "opencv_world3411.lib")
+endif()
+include_directories(${OpenCV_DIRS}/include)
+link_directories(${OpenCV_LIBRARY_DIRS})
+
 # requires Caffe
 find_package(Caffe REQUIRED)
 if(Caffe_FOUND)

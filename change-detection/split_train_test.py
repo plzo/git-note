@@ -21,12 +21,12 @@ def get_list(project_dir,eval_set):
 			try:
 				cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 1")
 			except:
-				cursor = c.execute("SELECT id FROM Classify_0 WHERE selected == 1")
+				cursor = c.execute("SELECT id FROM Detection_0 WHERE selected == 1")
 		else:
 			try:
 				cursor = c.execute("SELECT id FROM RegClassify_0 WHERE selected == 2")
 			except:
-				cursor = c.execute("SELECT id FROM Classify_0 WHERE selected == 2")
+				cursor = c.execute("SELECT id FROM Detection_0 WHERE selected == 2")
 		return [row[0] for row in cursor]
 
 def get_label_suffix(project_dir):
@@ -68,13 +68,16 @@ def split_train_test(project_dir,source_dir = ''):
 
 
 if __name__ == '__main__':
-	project_dir = r'D:\yang.xie\aidi_projects\20201117-iteration4\iter04\RegClassify_0'
-	source_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\source'
-	# split_train_test(project_dir,source_dir)
+	# project_dir = r'D:\yang.xie\aidi_projects\20201117-iteration4\iter04\RegClassify_0'
+	# source_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\generate_label\Detection_0\source'
+	# # split_train_test(project_dir,source_dir)
 
-	source_ok_dir = r'D:\yang.xie\aidi_projects\20201117-iteration4\iter04\OK\source'
-	split_train_test(project_dir,source_ok_dir)
+	# source_ok_dir = r'D:\yang.xie\aidi_projects\20201117-iteration4\iter04\OK\source'
+	# split_train_test(project_dir,source_ok_dir)
 	
+
+	project_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\tian_jin_dian_zhuang\Detection_0'
+	split_train_test(project_dir)
 
 
 

@@ -76,6 +76,7 @@ class eval_tools():
 	def __init__(self,root_dir, out_path):
 		self.root_dir = root_dir
 		self.eval_set = 'test'
+		self.list_src = 'db'
 
 		self.name_list = []
 		self.name_level_list = []
@@ -147,6 +148,20 @@ class eval_tools():
 		print('Can not find xml file!')
 		return ''
 
+	def get_task_list(self):
+		json_str = open(self.root_dir + '/task.json','r', encoding='UTF-8')
+		json_dict = json.load(json_str)
+		train_list = json_dict['indexes']['value']
+		test_list = []
+		if self.eval_set == 'train':
+			self.set_list = train_list
+		else:
+			for one_label in os.listdir(root_dir + '/label'):
+				index = int(one_label.strip().split('.')[0])
+				if index not in train_list:
+					test_list.append(index)
+			self.set_list = test_list
+			
 	def get_list(self):
 		db_file = self.get_db_file()			
 		with sqlite3.connect(db_file) as conn:
@@ -544,9 +559,15 @@ class eval_tools():
 				return self.make_pair(split_name[0],0.9)
 		else:
 			return self.make_pair(label_name, score)
+	
+	def set_list_src(self,list_src):
+		self.list_src = list_src
 
 	def get_name_score_list(self):
-		self.get_list()
+		if self.list_src == 'db':
+			self.get_list()
+		else:
+			self.get_task_list()
 		pair_list = []
 		name_list = []
 		label_suffix = self.get_label_suffix()
@@ -554,6 +575,8 @@ class eval_tools():
 			one_pair = {}
 			label_path = self.root_dir + '/label/' + str(one_index) + label_suffix
 			prob_path = self.root_dir + '/test_result/' + str(one_index) + label_suffix
+			if not os.path.exists(prob_path):
+				continue
 
 			label_name, label_score = self.get_name_score(label_path)
 			prob_name, prob_score = self.get_name_score(prob_path)
@@ -575,9 +598,14 @@ if __name__ == '__main__':
 	# out_path = 'D:/yang.xie/data/数据分析/channel3.xlsx'
 	# root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/channel3/RegClassify_0'
 
-	out_path = 'D:/yang.xie/data/数据分析/classify_30_sok.xlsx'
-	root_dir = 'D:/yang.xie/aidi_projects/20201117-iteration4/classify_30_sok/Classify_0'	
+	# out_path = 'D:/yang.xie/data/数据分析/cls_roi_R101_1500iter.xlsx'
+	# root_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\cls_roi\Classify_0'	
+
+	out_path = 'D:/yang.xie/data/数据分析/20210106-multi-cls/baseline-only128.xlsx'
 	
+	root_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls\Classify_0'
+	print(out_path)
 	eval_set = eval_tools(root_dir,out_path)
+	# eval_set.set_list_src('task')
 	eval_set.save_result(False)
 		

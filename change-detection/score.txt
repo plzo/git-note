@@ -1,0 +1,207 @@
+***************** 110.aqlabel *****************
+channel:  r   label:  绿油沾金   prob:  绿油沾金   score:  0.950426817
+channel:  g   label:  绿油沾金   prob:  绿油沾金   score:  0.629576325
+channel:  b   label:  绿油沾金   prob:  绿油沾金   score:  0.917299926
+channel:  rgb   label:  绿油沾金   prob:  绿油沾金   score:  0.988097489
+channel:  h   label:  绿油沾金   prob:  OK   score:  0.359682202
+channel:  s   label:  绿油沾金   prob:  绿油沾金   score:  0.994576216
+channel:  v   label:  绿油沾金   prob:  绿油沾金   score:  0.915260851
+channel:  hsv   label:  绿油沾金   prob:  绿油沾金   score:  0.995707393
+***************** 115.aqlabel *****************
+channel:  r   label:  基材毛刺   prob:  基材毛刺   score:  0.999841094
+channel:  g   label:  基材毛刺   prob:  基材毛刺   score:  0.998483717
+channel:  b   label:  基材毛刺   prob:  基材毛刺   score:  0.997539639
+channel:  rgb   label:  基材毛刺   prob:  基材毛刺   score:  0.998587251
+channel:  h   label:  基材毛刺   prob:  基材毛刺   score:  0.955724478
+channel:  s   label:  基材毛刺   prob:  OK   score:  0.715572417
+channel:  v   label:  基材毛刺   prob:  基材毛刺   score:  0.996874571
+channel:  hsv   label:  基材毛刺   prob:  基材毛刺   score:  0.976160765
+***************** 1973.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  OK   score:  0.975876153
+channel:  g   label:  绿油异物   prob:  绿油异物   score:  0.715758562
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.652458072
+channel:  rgb   label:  绿油异物   prob:  OK   score:  0.531889558
+channel:  h   label:  绿油异物   prob:  OK   score:  0.875531197
+channel:  s   label:  绿油异物   prob:  绿油异物   score:  0.975400567
+channel:  v   label:  绿油异物   prob:  绿油沾金   score:  0.953118205
+channel:  hsv   label:  绿油异物   prob:  OK   score:  0.877112448
+***************** 1976.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  绿油异物   score:  0.860820949
+channel:  g   label:  绿油异物   prob:  绿油异物   score:  0.939685702
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.999826
+channel:  rgb   label:  绿油异物   prob:  绿油异物   score:  0.656371474
+channel:  h   label:  绿油异物   prob:  OK   score:  0.490957916
+channel:  s   label:  绿油异物   prob:  绿油异物   score:  0.900621474
+channel:  v   label:  绿油异物   prob:  绿油异物   score:  0.568601429
+channel:  hsv   label:  绿油异物   prob:  绿油异物   score:  0.730243564
+***************** 2019.aqlabel *****************
+channel:  r   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.986023903
+channel:  g   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.808655262
+channel:  b   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.990584254
+channel:  rgb   label:  焊盘毛刺   prob:  OK   score:  0.798601389
+channel:  h   label:  焊盘毛刺   prob:  OK   score:  0.990321696
+channel:  s   label:  焊盘毛刺   prob:  OK   score:  0.997490883
+channel:  v   label:  焊盘毛刺   prob:  OK   score:  0.900911033
+channel:  hsv   label:  焊盘毛刺   prob:  OK   score:  0.999073505
+***************** 2338.aqlabel *****************
+channel:  r   label:  绿油沾金   prob:  绿油沾金   score:  0.987185776
+channel:  g   label:  绿油沾金   prob:  绿油沾金   score:  0.982336462
+channel:  b   label:  绿油沾金   prob:  绿油沾金   score:  0.982688
+channel:  rgb   label:  绿油沾金   prob:  绿油沾金   score:  0.983715594
+channel:  h   label:  绿油沾金   prob:  绿油沾金   score:  0.88581419
+channel:  s   label:  绿油沾金   prob:  绿油沾金   score:  0.82998
+channel:  v   label:  绿油沾金   prob:  绿油沾金   score:  0.845224261
+channel:  hsv   label:  绿油沾金   prob:  OK   score:  0.994694293
+***************** 2345.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  OK   score:  0.999791563
+channel:  g   label:  绿油异物   prob:  OK   score:  0.962826908
+channel:  b   label:  绿油异物   prob:  OK   score:  0.998248577
+channel:  rgb   label:  绿油异物   prob:  OK   score:  0.999608457
+channel:  h   label:  绿油异物   prob:  OK   score:  0.989778936
+channel:  s   label:  绿油异物   prob:  OK   score:  0.999991775
+channel:  v   label:  绿油异物   prob:  OK   score:  0.999947786
+channel:  hsv   label:  绿油异物   prob:  OK   score:  0.999980927
+***************** 3326.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  绿油异物   score:  0.612091362
+channel:  g   label:  绿油异物   prob:  OK   score:  0.718382537
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.803238511
+channel:  rgb   label:  绿油异物   prob:  绿油异物   score:  0.556173384
+channel:  h   label:  绿油异物   prob:  OK   score:  0.996392548
+channel:  s   label:  绿油异物   prob:  OK   score:  0.910486817
+channel:  v   label:  绿油异物   prob:  OK   score:  0.55114466
+channel:  hsv   label:  绿油异物   prob:  OK   score:  0.897484362
+***************** 3547.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  OK   score:  0.997358263
+channel:  g   label:  绿油异物   prob:  OK   score:  0.775552869
+channel:  b   label:  绿油异物   prob:  OK   score:  0.698488832
+channel:  rgb   label:  绿油异物   prob:  OK   score:  0.748931
+channel:  h   label:  绿油异物   prob:  绿油异物   score:  0.832224071
+channel:  s   label:  绿油异物   prob:  OK   score:  0.754762173
+channel:  v   label:  绿油异物   prob:  OK   score:  0.774538219
+channel:  hsv   label:  绿油异物   prob:  OK   score:  0.946376443
+***************** 4130.aqlabel *****************
+channel:  r   label:  铜孔毛刺   prob:  OK   score:  0.972175062
+channel:  g   label:  铜孔毛刺   prob:  OK   score:  0.887765408
+channel:  b   label:  铜孔毛刺   prob:  焊盘毛刺   score:  0.991653502
+channel:  rgb   label:  铜孔毛刺   prob:  OK   score:  0.569994628
+channel:  h   label:  铜孔毛刺   prob:  OK   score:  0.999826968
+channel:  s   label:  铜孔毛刺   prob:  OK   score:  0.996855378
+channel:  v   label:  铜孔毛刺   prob:  OK   score:  0.999428809
+channel:  hsv   label:  铜孔毛刺   prob:  OK   score:  0.999188125
+***************** 4142.aqlabel *****************
+channel:  r   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.678913
+channel:  g   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.995560288
+channel:  b   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.995761812
+channel:  rgb   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.675584257
+channel:  h   label:  焊盘毛刺   prob:  OK   score:  0.575517476
+channel:  s   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.993454337
+channel:  v   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.900343835
+channel:  hsv   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.557903409
+***************** 4435.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  OK   score:  0.999352634
+channel:  g   label:  绿油异物   prob:  OK   score:  0.950512052
+channel:  b   label:  绿油异物   prob:  OK   score:  0.968150318
+channel:  rgb   label:  绿油异物   prob:  OK   score:  0.997780621
+channel:  h   label:  绿油异物   prob:  OK   score:  0.966576934
+channel:  s   label:  绿油异物   prob:  OK   score:  0.613271594
+channel:  v   label:  绿油异物   prob:  OK   score:  0.976669192
+channel:  hsv   label:  绿油异物   prob:  OK   score:  0.966706038
+***************** 5265.aqlabel *****************
+channel:  r   label:  铜孔毛刺   prob:  铜孔毛刺   score:  0.965300918
+channel:  g   label:  铜孔毛刺   prob:  铜孔毛刺   score:  0.963340342
+channel:  b   label:  铜孔毛刺   prob:  铜孔毛刺   score:  0.998491049
+channel:  rgb   label:  铜孔毛刺   prob:  铜孔毛刺   score:  0.999555886
+channel:  h   label:  铜孔毛刺   prob:  OK   score:  0.977373242
+channel:  s   label:  铜孔毛刺   prob:  铜孔毛刺   score:  0.738383889
+channel:  v   label:  铜孔毛刺   prob:  OK   score:  0.857101738
+channel:  hsv   label:  铜孔毛刺   prob:  OK   score:  0.99741745
+***************** 6844.aqlabel *****************
+channel:  r   label:  基材毛刺   prob:  线路沾金   score:  0.676272929
+channel:  g   label:  基材毛刺   prob:  OK   score:  0.965944171
+channel:  b   label:  基材毛刺   prob:  线路沾金   score:  0.409522563
+channel:  rgb   label:  基材毛刺   prob:  OK   score:  0.448396266
+channel:  h   label:  基材毛刺   prob:  基材毛刺   score:  0.60956049
+channel:  s   label:  基材毛刺   prob:  焊盘毛刺   score:  0.952121556
+channel:  v   label:  基材毛刺   prob:  基材毛刺   score:  0.675064087
+channel:  hsv   label:  基材毛刺   prob:  焊盘毛刺   score:  0.493237346
+***************** 7457.aqlabel *****************
+channel:  r   label:  铜孔毛刺   prob:  焊盘毛刺   score:  0.755224705
+channel:  g   label:  铜孔毛刺   prob:  焊盘毛刺   score:  0.933821559
+channel:  b   label:  铜孔毛刺   prob:  OK   score:  0.930344045
+channel:  rgb   label:  铜孔毛刺   prob:  焊盘毛刺   score:  0.795867
+channel:  h   label:  铜孔毛刺   prob:  OK   score:  0.72790128
+channel:  s   label:  铜孔毛刺   prob:  焊盘毛刺   score:  0.620598495
+channel:  v   label:  铜孔毛刺   prob:  铜孔毛刺   score:  0.458083749
+channel:  hsv   label:  铜孔毛刺   prob:  OK   score:  0.564206064
+***************** 8685.aqlabel *****************
+channel:  r   label:  线路沾金   prob:  绿油沾金   score:  0.497915179
+channel:  g   label:  线路沾金   prob:  绿油沾金   score:  0.732041895
+channel:  b   label:  线路沾金   prob:  线路沾金   score:  0.827709734
+channel:  rgb   label:  线路沾金   prob:  线路沾金   score:  0.520132184
+channel:  h   label:  线路沾金   prob:  OK   score:  0.991410196
+channel:  s   label:  线路沾金   prob:  线路沾金   score:  0.660301328
+channel:  v   label:  线路沾金   prob:  OK   score:  0.938764572
+channel:  hsv   label:  线路沾金   prob:  OK   score:  0.883191824
+***************** 8950.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  绿油异物   score:  0.999671459
+channel:  g   label:  绿油异物   prob:  绿油异物   score:  0.998049498
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.996751666
+channel:  rgb   label:  绿油异物   prob:  绿油异物   score:  0.989573658
+channel:  h   label:  绿油异物   prob:  绿油异物   score:  0.902592182
+channel:  s   label:  绿油异物   prob:  OK   score:  0.689238191
+channel:  v   label:  绿油异物   prob:  绿油异物   score:  0.672549605
+channel:  hsv   label:  绿油异物   prob:  绿油异物   score:  0.998505235
+***************** 8982.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  绿油异物   score:  0.9778139
+channel:  g   label:  绿油异物   prob:  绿油异物   score:  0.938252628
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.984107733
+channel:  rgb   label:  绿油异物   prob:  OK   score:  0.663106561
+channel:  h   label:  绿油异物   prob:  绿油异物   score:  0.897225201
+channel:  s   label:  绿油异物   prob:  绿油异物   score:  0.540954053
+channel:  v   label:  绿油异物   prob:  绿油异物   score:  0.524922609
+channel:  hsv   label:  绿油异物   prob:  绿油异物   score:  0.674310863
+***************** 9003.aqlabel *****************
+channel:  r   label:  绿油沾金   prob:  绿油沾金   score:  0.939242244
+channel:  g   label:  绿油沾金   prob:  绿油沾金   score:  0.987401307
+channel:  b   label:  绿油沾金   prob:  绿油沾金   score:  0.98666513
+channel:  rgb   label:  绿油沾金   prob:  绿油沾金   score:  0.996221781
+channel:  h   label:  绿油沾金   prob:  OK   score:  0.632355213
+channel:  s   label:  绿油沾金   prob:  绿油沾金   score:  0.988101721
+channel:  v   label:  绿油沾金   prob:  绿油沾金   score:  0.966925681
+channel:  hsv   label:  绿油沾金   prob:  绿油沾金   score:  0.760243654
+***************** 9255.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  绿油异物   score:  0.836150348
+channel:  g   label:  绿油异物   prob:  绿油异物   score:  0.599405885
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.842242122
+channel:  rgb   label:  绿油异物   prob:  线路沾金   score:  0.711929739
+channel:  h   label:  绿油异物   prob:  OK   score:  0.491008729
+channel:  s   label:  绿油异物   prob:  线路沾金   score:  0.949909151
+channel:  v   label:  绿油异物   prob:  OK   score:  0.687866449
+channel:  hsv   label:  绿油异物   prob:  OK   score:  0.892233849
+***************** 9305.aqlabel *****************
+channel:  r   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.984647632
+channel:  g   label:  焊盘毛刺   prob:  OK   score:  0.751203179
+channel:  b   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.91076231
+channel:  rgb   label:  焊盘毛刺   prob:  OK   score:  0.670740843
+channel:  h   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.497092217
+channel:  s   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.993597627
+channel:  v   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.986882389
+channel:  hsv   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.791041374
+***************** 9385.aqlabel *****************
+channel:  r   label:  绿油异物   prob:  绿油异物   score:  0.978936851
+channel:  g   label:  绿油异物   prob:  绿油异物   score:  0.833384037
+channel:  b   label:  绿油异物   prob:  绿油异物   score:  0.963152647
+channel:  rgb   label:  绿油异物   prob:  绿油异物   score:  0.898985207
+channel:  h   label:  绿油异物   prob:  绿油异物   score:  0.94521296
+channel:  s   label:  绿油异物   prob:  OK   score:  0.96244663
+channel:  v   label:  绿油异物   prob:  OK   score:  0.584812582
+channel:  hsv   label:  绿油异物   prob:  绿油异物   score:  0.669847548
+***************** 9855.aqlabel *****************
+channel:  r   label:  焊盘毛刺   prob:  OK   score:  0.918936491
+channel:  g   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.894153953
+channel:  b   label:  焊盘毛刺   prob:  OK   score:  0.648029387
+channel:  rgb   label:  焊盘毛刺   prob:  OK   score:  0.998718381
+channel:  h   label:  焊盘毛刺   prob:  OK   score:  0.994299412
+channel:  s   label:  焊盘毛刺   prob:  焊盘毛刺   score:  0.988123953
+channel:  v   label:  焊盘毛刺   prob:  OK   score:  0.966087818
+channel:  hsv   label:  焊盘毛刺   prob:  OK   score:  0.842729688
