@@ -35,7 +35,7 @@ def get_roi(points_set):
 
 
 def crop_dir(project_dir):
-    source_dir = project_dir + '/source'
+    source_dir = project_dir + '/source-origin'
     label_dir = project_dir + '/label-roi'
     dst_dir = project_dir + '/source-roi-resize128'
     if not os.path.exists(dst_dir):
@@ -56,7 +56,7 @@ def crop_dir(project_dir):
 
 
 if __name__ == '__main__':
-    project_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls2\Classify_0'
+    project_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls_png\Classify_0'
     crop_dir(project_dir)
 
 

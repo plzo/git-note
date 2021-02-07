@@ -114,6 +114,27 @@ target_link_libraries(main ${OpenCV_LIBS} ${Caffe_LIBRARIES} ${GTEST_LIBRARY} cr
 find_package( Caffe REQUIRED PATHS "C:\\Program Files\\Caffe" NO_DEFAULT_PATH )
 find_package( Caffe REQUIRED PATHS "C:\\Program Files\\Caffe_ori\\share\\Caffe" NO_DEFAULT_PATH )
 ```
+链接第三方库
+（1）链接静态库
+```
+set(PROTOBUF_LIBS "libprotobuf.lib")
+include_directories(${PROTOBUF_PATH}/include)
+link_directories(${PROTOBUF_PATH}/build/${CMAKE_BUILD_TYPE}/x64)
+
+add_executable(main ${SOURCE_FILES})
+target_link_libraries(main ${OpenCV_LIBS} ${AIDIVISION_LIBS} ${PROTOBUF_LIBS} AqimgLabel)
+```
+（2）如果是动态库，则需要保证链接库的.dll文件和.exe在一个目录，或设置环境变量（将.dll放入环境变量路径）。
+find_package设置路径的一种方法：
+list(APPEND CMAKE_PREFIX_PATH ${PROTOBUF_PATH})
+find_package(Protobuf CONFIG REQUIRED)
+include_directories(STATUS ${Protobuf_INCLUDE_DIR})
+
+add_executable(main ${SOURCE_FILES})
+target_link_libraries(main ${OpenCV_LIBS} ${AIDIVISION_LIBS} AqimgLabel protobuf::libprotobuf)
+
+
+```
 
 ## 2.3. 运行
 ```

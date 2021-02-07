@@ -1,22 +1,27 @@
 import os
 import sys
 
-# inputdir = 'D:/yang.xie/aidi_projects/project-20201022/classify_no_reg/Classify_0/label'
-# inputdir = 'D:/yang.xie/aidi_projects/cls-seg20201027/data/processed/label_seg'
+root_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\channel_display\Classify_0'
+label_dir = root_dir + '/label'
+image_dir = root_dir + '/source'
+output_label = label_dir + '/../label_list.txt'
+output_image = image_dir + '/../image_list.txt'
 
-
-inputdir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls\Classify_0\label'
-
-# inputdir = 'D:/yang.xie/aidi_projects/shennan1107/label_combine_2/huiguifenge/RegClassify_0/label'
-
-
-
-output = inputdir + '/../label_list.txt'
-
-def makelist():
-    fp=open(output,'w')    
-    for one_file in os.listdir(inputdir):
+def makelist_label():
+    fp=open(output_label,'w')    
+    for one_file in os.listdir(label_dir):
         if one_file.endswith('.aqlabel'):                       
-            fp.write(inputdir + '/' + one_file)
+            fp.write(label_dir + '/' + one_file)
             fp.write('\n')      
-makelist()
+
+
+def makelist_image():
+    fp=open(output_image,'w')    
+    for one_file in os.listdir(image_dir):
+        if one_file.endswith('.aqimg'):                       
+            fp.write(image_dir + '/' + one_file)
+            fp.write('\n')   
+
+
+makelist_label()
+makelist_image()

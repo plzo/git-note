@@ -577,9 +577,12 @@ class eval_tools():
 			prob_path = self.root_dir + '/test_result/' + str(one_index) + label_suffix
 			if not os.path.exists(prob_path):
 				continue
-
-			label_name, label_score = self.get_name_score(label_path)
-			prob_name, prob_score = self.get_name_score(prob_path)
+			try:
+				label_name, label_score = self.get_name_score(label_path)
+				prob_name, prob_score = self.get_name_score(prob_path)
+			except:
+				print(label_path)
+				continue
 
 			split_label_name = label_name.split('_')
 			split_prob_name = prob_name.split('_')
@@ -601,9 +604,9 @@ if __name__ == '__main__':
 	# out_path = 'D:/yang.xie/data/数据分析/cls_roi_R101_1500iter.xlsx'
 	# root_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\cls_roi\Classify_0'	
 
-	out_path = 'D:/yang.xie/data/数据分析/20210106-multi-cls/baseline-only128.xlsx'
+	out_path = 'D:/yang.xie/data/数据分析/20210127-kt/cls_64_v1.xlsx'
 	
-	root_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls\Classify_0'
+	root_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls_aqimg\Classify_0'
 	print(out_path)
 	eval_set = eval_tools(root_dir,out_path)
 	# eval_set.set_list_src('task')
