@@ -40,10 +40,14 @@ def show(src_path,one_index):
         img_add = img_add.astype(np.uint8)
 
 
+        src_RGB = cv2.cvtColor(defect_img, cv2.COLOR_RGB2GRAY)
+        print(src_RGB[0][0])
+        src_RGB = cv2.cvtColor(src_RGB, cv2.COLOR_GRAY2RGB)
+        print(src_RGB[0][0])
 
-        print(defect_img[0][0])
-        print(ok_img[0][0])
-        print(img[0][0])
+        # print(defect_img[0][0])
+        # print(ok_img[0][0])
+        # print(img[0][0])
 
         cv2.imshow('HSV1', img_add)
         cv2.waitKey(0)

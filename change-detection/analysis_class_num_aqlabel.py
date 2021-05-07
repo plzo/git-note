@@ -39,5 +39,6 @@ if __name__ == '__main__':
 	
 	# label_dir = "D:/yang.xie/aidi_projects/cls-seg20201027/base_project/RegClassify_0/label"
 	# label_dir = "D:/yang.xie/aidi_projects/cls-seg20201027/data/processed/label_seg_cls_train"
-	label_dir = r"D:\yang.xie\aidi_projects\20210129-pcb-newlabel\channel_display\Classify_0\label_type_name"
+	label_dir = r"D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20210419_big_set\process_data\label_origin"
+
 	display_aqlabel(label_dir)

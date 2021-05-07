@@ -604,11 +604,25 @@ if __name__ == '__main__':
 	# out_path = 'D:/yang.xie/data/数据分析/cls_roi_R101_1500iter.xlsx'
 	# root_dir = r'D:\yang.xie\aidi_projects\20201203-ROI-bias\cls_roi\Classify_0'	
 
-	out_path = 'D:/yang.xie/data/数据分析/20210127-kt/cls_64_v1.xlsx'
-	
-	root_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls_aqimg\Classify_0'
+	# out_path = 'D:/yang.xie/data/数据分析/20210127-kt/cls_64_v1.xlsx'
+	# root_dir = r'D:\yang.xie\aidi_projects\20210105-multi-cls\cls_aqimg\Classify_0'
+
+	# out_path = 'D:/yang.xie/data/数据分析/20210224-pcb/base_v2_combine14.xlsx'
+	# root_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\cls_1_base\Classify_0'
+
+	# classify
+	# out_path = 'D:/yang.xie/data/数据分析/20210224-pcb/base_roi_v2_combine14_3.xlsx'
+	# root_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\cls_2_roi\Classify_0'
+	# print(out_path)
+	# eval_set = eval_tools(root_dir,out_path)
+	# eval_set.set_list_src('task')
+	# eval_set.save_result(False)
+
+	# regclassify
+	out_path = 'D:/yang.xie/data/数据分析/20210419_cls_top44.xlsx'
+	root_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20210419_big_set\aidi_reg_cls\RegClassify_0'
 	print(out_path)
 	eval_set = eval_tools(root_dir,out_path)
 	# eval_set.set_list_src('task')
-	eval_set.save_result(False)
+	eval_set.save_result(True)
 		

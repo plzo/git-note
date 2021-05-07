@@ -4,6 +4,53 @@
         "width": 128,
         "height": 128
     },
+    "name": "abc",
+    "score": 0,
+    "regions": [
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 0,
+                            "y": 0
+                        },
+                        {
+                            "x": 0,
+                            "y": 128
+                        },
+                        {
+                            "x": 128,
+                            "y": 0
+                        },
+                        {
+                            "x": 128,
+                            "y": 128
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "",
+            "score": 0.3,
+            "key_points": [],
+            "ext_info": {}
+        }
+    ],
+    "masks": [],
+    "hardcases": [],
+    "ext_info": {}
+}
+
+
+
+
+{
+    "dataset_type": "Classify",
+    "img_size": {
+        "width": 128,
+        "height": 128
+    },
     "name": "",
     "score": 0,
     "regions": [
@@ -246,6 +293,109 @@
                     "ext_info": {}
                 }
             ],
+            "ext_info": {}
+        }
+    ],
+    "masks": [],
+    "hardcases": [],
+    "origin_result": {},
+    "ext_info": {}
+}
+
+ {
+    "dataset_type": "Detection",
+    "img_size": {
+        "width": 128,
+        "height": 128
+    },
+    "name": "",
+    "score": 1.4013e-45,
+    "regions": [
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 3.46158767,
+                            "y": 13.8463507
+                        },
+                        {
+                            "x": 3.46158767,
+                            "y": 33.5507736
+                        },
+                        {
+                            "x": 21.834631,
+                            "y": 33.5507736
+                        },
+                        {
+                            "x": 21.834631,
+                            "y": 13.8463507
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "鑴忔薄",
+            "score": 1.4013e-45,
+            "key_points": [],
+            "ext_info": {}
+        },
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 49.7936096,
+                            "y": 81.4804535
+                        },
+                        {
+                            "x": 49.7936096,
+                            "y": 96.6581802
+                        },
+                        {
+                            "x": 87.3385239,
+                            "y": 96.6581802
+                        },
+                        {
+                            "x": 87.3385239,
+                            "y": 81.4804535
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "鑴忔薄",
+            "score": 1.4013e-45,
+            "key_points": [],
+            "ext_info": {}
+        },
+        {
+            "polygon": {
+                "outer": {
+                    "points": [
+                        {
+                            "x": 2.9290359,
+                            "y": 77.7525864
+                        },
+                        {
+                            "x": 2.9290359,
+                            "y": 96.9244537
+                        },
+                        {
+                            "x": 26.8938732,
+                            "y": 96.9244537
+                        },
+                        {
+                            "x": 26.8938732,
+                            "y": 77.7525864
+                        }
+                    ]
+                },
+                "inners": []
+            },
+            "name": "鑴忔薄",
+            "score": 1.4013e-45,
+            "key_points": [],
             "ext_info": {}
         }
     ],

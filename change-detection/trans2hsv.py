@@ -9,13 +9,140 @@ sys.path.insert(0,'D:/yang.xie/packages')
 from aidi410_label.aidi_vision import *
 
 
+def kernel(img,i,j,s):
+    sum = 0.
+    for row in range(i-s,i+s+1):
+        for col in range(j-s,j+s+1):
+            sum = sum + img[row][col]
+    #         print('for sum: ',sum)
+    #         print('pix: ',img[row][col])
+    # print('sum:  ',sum)
+    res = sum/((2*s+1)*(2*s+1))
+    # print('res:  ',res)
+    return res
+
+
+def img_filter(img):
+    h = img.shape[0]
+    w = img.shape[1]
+    for i in range(1,h-1):
+        for j in range(1,w-1):
+            img[i][j] = int(kernel(img,i,j,1))
+    return img
+
+show_list = [1732,388,1740,1741,8715,2345,3326,1976,1026,3547,4435]
+
+def contrast_enhance(img):
+
+    cv2.imshow('origin_img', img)
+    cv2.waitKey(0)
+    h = img.shape[0]
+    w = img.shape[1]
+    total = h*w
+
+    for i in range(5):
+        img = img_filter(img)
+
+    pix_dict = {}
+    # pix_list = []
+    for i in range(256):
+        pix_dict[i] = 0
+        # pix_list.append(0)
+
+    for i in range(h):
+        for j in range(w):
+            pix_dict[img[i][j]] = pix_dict[img[i][j]] + 1
+
+    tmp_dict = sorted(pix_dict.items(), key = lambda kv:(kv[1], kv[0]))
+    print(tmp_dict)
+
+    top_list = []
+    for i in range(2):
+        top_list.append(tmp_dict[255-i][0])
+    print(top_list)
+
+    en_list = []
+    for one_index in top_list:
+        en_list.append(one_index - 3)
+        en_list.append(one_index - 2)
+        en_list.append(one_index - 1)
+        en_list.append(one_index)
+        en_list.append(one_index+1)
+        en_list.append(one_index+2)
+        en_list.append(one_index+3)
+
+    print(en_list)
+
+    # for i in range(256):
+    #     pix_dict[i] = 0
+    # for i in range(h):
+    #     for j in range(w):
+    #         pix_dict[img1[i][j]] = pix_dict[img1[i][j]] + 1
+    # print(pix_dict)
+
+    # for i in range(256):
+    #     if i == 0:
+    #         pix_list[i] = pix_dict[i]/total
+    #     else:
+    #         pix_list[i] = pix_list[i-1] + pix_dict[i]/total
+
+    # print(pix_list)
+
+    # cv2.imshow('origin_img', img1)
+    # cv2.waitKey(0)
+
+    # for i in range(h):
+    #     for j in range(w):
+    #         img[i][j] = img[i][j] + (img[i][j] - img1[i][j])*(img[i][j] - img1[i][j])
+
+    # for i in range(h):
+    #     for j in range(w):
+    #         img[i][j] = pix_list[img[i][j]]*255 + 0.5
+
+    # for i in range(h):
+    #     for j in range(w):
+    #         float_num = float(img[i][j])
+    #         tmp = float_num*float_num
+    #         tmp = tmp/10
+    #         if tmp > 255:
+    #             tmp = 255
+    #         img[i][j] = int(tmp)
+
+    # for i in range(h):
+    #     for j in range(w):
+    #         if img[i][j] >28 and img[i][j] < 45:
+    #             img[i][j] += 40
+
+    for i in range(h):
+        for j in range(w):
+            if img[i][j] in en_list:
+                img[i][j] += 40
+
+    cv2.imshow('origin_img', img)
+    cv2.waitKey(0)
+
 def show(src_path,one_index):
         img = Image()
         img.from_file(src_path)
+
         defect_img = image2numpy(img.visual_at(0))
-        hsv = cv2.cvtColor(defect_img, cv2.COLOR_BGR2HSV)
-        H,S,V = cv2.split(hsv)
+        defect_img = defect_img.astype(np.uint8)
         R,G,B = cv2.split(defect_img)
+
+        normal_img = image2numpy(img.visual_at(1))
+        normal_img = normal_img.astype(np.uint8)
+        R1,G1,B1 = cv2.split(normal_img)
+
+        contrast_enhance(R1)
+
+        # hsv = cv2.cvtColor(defect_img, cv2.COLOR_BGR2YCrCb)
+        hsv = cv2.cvtColor(defect_img, cv2.COLOR_BGR2HSV)
+
+        H,S,V = cv2.split(hsv)
+
+        contrast_enhance(R)
+
+        
         cv2.imwrite('../'+str(one_index)+'-01HSV.png', hsv)
         cv2.imwrite('../'+str(one_index)+'-02H.png', H)
         cv2.imwrite('../'+str(one_index)+'-03S.png', S)
@@ -142,7 +269,7 @@ if __name__ == '__main__':
 
     # trans2hsv(src_dir,dst_dir)
 
-    show_list = [110, 115, 1973, 1973, 1973, 1973, 1976, 2019, 2019, 2019, 2019, 2019, 2338, 2345, 2345, 2345, 2345, 2345, 2345, 2345, 2345, 3326, 3326, 3326, 3326, 3326, 3547, 3547, 3547, 3547, 3547, 3547, 3547, 4130, 4130, 4130, 4130, 4130, 4130, 4130, 4142, 4435, 4435, 4435, 4435, 4435, 4435, 4435, 4435, 5265, 5265, 5265, 6844, 6844, 7457, 7457, 7457, 8685, 8685, 8685, 8950, 8982, 9003, 9255, 9255, 9255, 9305, 9305, 9385, 9385, 9855, 9855, 9855, 9855, 9855, 9855]
+    # show_list = [110, 115, 1973, 1976, 2019, 2338, 2345, 3326, 3547, 4130, 4142, 4435, 5265, 6844, 7457, 8685, 8950, 8982, 9003, 9255, 9305, 9385, 9855, 20000,20001,20002,20003,20004]
     # show_list = [2345,4435,1973,2019,3547,4130,6844,8982,9305,9855]
 
     root_dir = r'D:\yang.xie\aidi_projects\20201222-rgbhs\cls_roi_r\Classify_0\source'

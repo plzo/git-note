@@ -29,7 +29,7 @@ if __name__ == '__main__':
 	# display_json(label_dir)
 
 	# label_dir = "D:/yang.xie/aidi_projects/update-label0918/data/数据筛查_json/6通道_fix/label"
-	label_dir = "D:/yang.xie/aidi_projects/update-label0918/reg_cls_double/RegClassify_0/label"
+	label_dir = r"D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20210419_big_set\cls\label"
 	display_json(label_dir)
 
 	
