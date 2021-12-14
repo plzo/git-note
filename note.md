@@ -726,6 +726,12 @@ image.at<cv::Vec3b>(i, j);
 ```
 cv::findContours(mask_roi_, mask_origin_contour, CV_RETR_TREE, CV_CHAIN_APPROX_NONE);
 cv::findContours(mask_roi_, mask_origin_contour, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+
+cv::findContours(rect_mat, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+cv::Rect rect = cv::boundingRect(cv::Mat(contours[0]));
+cv::Rect rect2 = cv::boundingRect(rect_mat);
+
+cv::rectangle(dist_mat,rect,cv::Scalar(125),-1);//填充成125
 ```
 ### 8.1.3. 类型
 ```
@@ -823,6 +829,13 @@ cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
 sudo cp build/libleveldb.a /usr/local/lib/
 sudo cp -r include/leveldb/ /usr/local/include/
 ```
+
+aidi_vision编译
+```
+cmake -B./build/vs-release -G "Visual Studio 15 2017" -T host=x64 -A x64
+cmake --build ./build/vs-release --config Release --target all -j 42
+```
+
 ---
 # MXnet安装
 ```

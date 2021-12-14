@@ -36,7 +36,7 @@ def fix_data_info_aqlabel(project_dir):
 	json.dump(data_info_json_dict, open(project_dir + '/dataset_info.json', 'w',encoding='UTF-8'),ensure_ascii=False)
 	
 if __name__ == '__main__':
-	project_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20210419_big_set\aidi_reg_cls\RegClassify_0'
+	project_dir = r'F:\yang.xie\projects\20211115_data_view\chaosheng\Classify_0\train_set_add_roi'
 	fix_data_info_aqlabel(project_dir)
 
 

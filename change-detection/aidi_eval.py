@@ -73,10 +73,10 @@ class xlwt_tools():
 		self.workbook.save(self.out_path)
 
 class eval_tools():
-	def __init__(self,root_dir, out_path):
+	def __init__(self,root_dir, out_path,list_src):
 		self.root_dir = root_dir
 		self.eval_set = 'test'
-		self.list_src = 'db'
+		self.list_src = list_src
 
 		self.name_list = []
 		self.name_level_list = []
@@ -619,10 +619,10 @@ if __name__ == '__main__':
 	# eval_set.save_result(False)
 
 	# regclassify
-	out_path = 'D:/yang.xie/data/数据分析/20210419_cls_top44.xlsx'
-	root_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20210419_big_set\aidi_reg_cls\RegClassify_0'
+	out_path = 'D:/yang.xie/data/数据分析(实验结果)/chaosheng_roi_aidi.xlsx'
+	root_dir = r'F:\yang.xie\projects\20211115_data_view\chaosheng_roi_aidi\Classify_0'
 	print(out_path)
-	eval_set = eval_tools(root_dir,out_path)
-	# eval_set.set_list_src('task')
+	# eval_set = eval_tools(root_dir,out_path,'task')
+	eval_set = eval_tools(root_dir,out_path,'db')
 	eval_set.save_result(True)
 		
