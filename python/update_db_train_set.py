@@ -25,6 +25,6 @@ def update_db(project_dir):
     print('finish!')
 
 if __name__ == '__main__':
-    project_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\test_sql\Classify_0'    
+    project_dir = r'F:\yang.xie\projects\20220525_pcb\filter5000\Classify_0'    
     update_db(project_dir)
 

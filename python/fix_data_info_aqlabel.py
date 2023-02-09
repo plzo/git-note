@@ -8,16 +8,27 @@ sys.path.insert(0,'D:/yang.xie/packages')
 from aidi410_label.aidi_vision import *
 
 def get_name_score(one_label_path):
-	in_label = LabelIO()
-	in_label.read_from(one_label_path)
-	json_label = json.loads(in_label.to_json())
-	return json_label['regions'][0]['name'],json_label['regions'][0]['score']
+	try:
+		in_label = LabelIO()
+		in_label.read_from(one_label_path)
+		json_label = json.loads(in_label.to_json())
+		return json_label['regions'][0]['name'],json_label['regions'][0]['score']
+	except:
+		return 'get_name_error',''
+
+# def get_name_score(one_label_path):
+# 	in_label = LabelIO()
+# 	in_label.read_from(one_label_path)
+# 	json_label = json.loads(in_label.to_json())
+# 	return json_label['regions'][0]['name'],json_label['regions'][0]['score']
 
 def get_list(aqlabel_dir):
 	class_list = []
 	class_dict = {}
 	for one_aqlabel in os.listdir(aqlabel_dir):
 		class_name,score = get_name_score(os.path.join(aqlabel_dir,one_aqlabel))
+		if class_name == 'get_name_error':
+			continue
 		if class_name not in class_list:
 			class_list.append(class_name)
 			class_dict[class_name] = 1
@@ -36,8 +47,17 @@ def fix_data_info_aqlabel(project_dir):
 	json.dump(data_info_json_dict, open(project_dir + '/dataset_info.json', 'w',encoding='UTF-8'),ensure_ascii=False)
 	
 if __name__ == '__main__':
-	project_dir = r'F:\yang.xie\projects\20211115_data_view\chaosheng\Classify_0\train_set_add_roi'
+	project_dir = r'F:\yang.xie\projects\20220525_pcb\chaosheng\Classify_0'
 	fix_data_info_aqlabel(project_dir)
+
+	# tmp_path = r'F:\yang.xie\projects\20220525_pcb\chaosheng\Classify_0\label\34381.aqlabel'
+	# in_label = LabelIO()
+	# in_label.read_from(tmp_path)
+	# tmp_str = in_label.to_json()
+	# print("**************: ",tmp_str)
+	# json_label = json.loads(tmp_str)
+	# print("##############: ",json_label)
+
 
 
 		

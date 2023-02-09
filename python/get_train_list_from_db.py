@@ -41,8 +41,9 @@ def fix_task_json(root_dir):
 	task_json_dict['indexes']['value'] = get_list(root_dir,'test')
 	json.dump(task_json_dict, open(project_dir + '/test_task.json', 'w',encoding='UTF-8'),ensure_ascii=False)
 
+
 if __name__ == '__main__':
-	project_dir = r'F:\yang.xie\projects\20211115_data_view\chaosheng_roi_aidi\Classify_0'
+	project_dir = r'F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn000\Classify_0'
 	fix_task_json(project_dir)
 
 

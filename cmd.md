@@ -77,53 +77,152 @@ view -f json D:/yang.xie/aidi_projects/project-20201022/base_project/RegClassify
 
 
 train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all\RegClassify_0\task.json
-train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_double\RegClassify_0\task.json
-train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_single\RegClassify_0\task.json
-train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all_2class\RegClassify_0\task.json
-train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_double_2class\RegClassify_0\task.json
-
 infer -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\update-label0918\reg_cls_all\RegClassify_0\task.json
 
 
 
 # 430
 
-templ -p . --module=Classify --type=train --file=D:\yang.xie\aidi_projects\20210129-pcb-newlabel\pcb_origin_iter04_cp\RegClassify_0\sub_projects\大焊盘-露镍\model\train2.json
+%(AdditionalOptions) -Zm800
 
-infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\test_classify2\Classify_0\task_V1.json
-
-
-train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=  F:\yang.xie\projects\test_segment\Segment_0\task_V1.json
-
-infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=  F:\yang.xie\projects\test_segment\Segment_0\task_V1.json
+    gen_rectangle1(ROI_0,220,220,240,240)
+    reduce_domain(NormalVectors,ROI_0,ImageReduced)
+    get_region_points(ROI_0,Rows,Columns)
+    get_grayval(NormalVectors,Rows,Columns,Grayval)
 
 
-train -p /algo --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\adc-train-project\sub_projects\主体检测\task_V1.json
+    gen_rectangle1(ROI_0,220,220,221,221)
+get_region_points(ROI_0,Rows2,Columns2)
+decompose3 (NormalVectors, Nx2, Ny2, Nz2)
+get_grayval (Nx2, Rows2, Columns2, GvNx2)
+get_grayval (Ny2, Rows2, Columns2, GvNy2)
+get_grayval (Nz2, Rows2, Columns2, GvNz2)
+GvN2 := [GvNx2,GvNy2,GvNz2]
+create_matrix (3, |GvNx2|, [GvNx2,GvNy2,GvNz2], MatrixNtID2)
+transpose_matrix (MatrixNtID2, MatrixNID2)
 
-
-
-train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\20210129-pcb-newlabel\pcb_origin_iter04_cp\RegClassify_0\sub_projects\cls_all_data_for_test\task_V1.json
-
-
-train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\20210129-pcb-newlabel\pcb_origin_iter04_cp\RegClassify_0\sub_projects\normal\task_aug.json
-
-train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20211014_small\sub_projects\normal\task_V1.json
-
-train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 D:\yang.xie\aidi_projects\20210129-pcb-newlabel\pcb_origin_iter04_cp\RegClassify_0\sub_projects\大焊盘-露镍\task_V1.json
-
-vrs.exe train D:\yang.xie\aidi_projects\20210129-pcb-newlabel\pcb_origin_iter04_cp\RegClassify_0\train_task.json new_aug(打开噪声) 1500 normal
+segment:
+aidi_vision.exe eval F:\yang.xie\projects\20220112-cdsegment\chaosheng200_aidi\Segment_0\train_task.json --eval="recall(--granul=pixel)>0.33"
+aidi_vision.exe eval F:\yang.xie\projects\20220112-cdsegment\chaosheng200_aidi\Segment_0\train_task.json --eval="precision(--granul=pixel)>0.33"
 
 cmake -B./build/vs-release -G "Visual Studio 15 2017" -T host=x64 -A x64
 cmake --build ./build/vs-release --config Release --target all -j 42
 
+cmake -B./build -G "Visual Studio 15 2017" -T host=x64 -A x64
 
-train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\adc-train-project\sub_projects\主体检测\task_V1.json
+git remote add origin2 git@git.aqrose.com:yang.xie/aidi_vision_v2_cls_seg.git
+
+templ -p . --module=Classify --type=train --file=F:\yang.xie\projects\STD_test_contrasive_classify\train.json
+
+templ -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --module=Classify --type=train --file=F:\yang.xie\projects\20220525_pcb\filter5000\Classify_0\new_train.json
+
+templ -p F:\yang.xie\workspace\aidi_vision_v2_cls_seg\build\x64\bin\Debug --module=TDSegment --type=task --file=F:\yang.xie\projects\20220505_3D\kptest_dinghan\task1.json
+
+train -p F:\yang.xie\workspace\aidi_vision_v2_cls_seg\build\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220505_3D\kptest_dinghan\task.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\test_classify2\Classify_0\task_V1.json
+
+train -p ./algo --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100_test\Classify_0\train_task.json
+
+train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100\Classify_0\train_task.json
+
+infer -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn010\Classify_0\all_task.json
+
+infer -p ./algo --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100_test\Classify_0\all_task.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2_develop\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_2c_small\Classify_0\task.json
 
 
-infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20211201-grade-exp-seg\test_classify\Classify_0\task_V1.json
+train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_1c_small\Classify_0\task.json
 
-infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20211201-grade-exp-seg\test_classify\Classify_0\task_V1.json
 
-train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20211115_chaosheng\adc_train_cmd\Classify_0\sub_projects\金面刮伤\task_V1.json
+infer -p F:\yang.xie\workspace\aidi_vision_v2\build\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\data\20221205_stable\AIDI_projects\base\Segment_0\task.json\task.json
 
-infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20211201-grade-exp-seg\test_classify\Classify_0\task_V1.json
+train -p F:\yang.xie\workspace\aidi_vision_v2_cls_seg\build\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:/yang.xie/projects/20220505_3D/焊渣焊高/task.json
+
+engine: CAFFE
+
+python src/compute_light_directions.py images/chrome/chrome.txt output/lights.txt
+python src/simple_photometric_stereo.py images/chrome/chrome.txt output/lights.txt output/calibrated_chrome_%s.png
+python src/unknown_light_photometric_stereo.py images/chrome/chrome.txt output/uncalibrated_chrome_%s.png
+python src/compute_depth_map.py images/chrome/chrome.txt output/calibrated_chrome_normal.png output/calibrated_chrome_%s.png
+python src/compute_depth_map.py images/chrome/chrome.txt output/uncalibrated_chrome_normal.png output/uncalibrated_chrome_%s.png
+
+python src/compute_light_directions.py images/ball/ball.txt output/lights.txt
+python src/simple_photometric_stereo.py images/ball/ball.txt output/lights.txt output/calibrated_ball_%s.png
+python src/unknown_light_photometric_stereo.py images/ball/ball.txt output/uncalibrated_ball_%s.png
+python src/compute_depth_map.py images/ball/ball.txt output/calibrated_ball_normal.png output/calibrated_ball_%s.png
+python src/compute_depth_map.py images/ball/ball.txt output/uncalibrated_ball_normal.png output/uncalibrated_ball_%s.png
+
+train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb500_small\v12.8_pcb600\Classify_0\task.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb500_small\v12.8_pcb600\Classify_0\task.json
+
+
+aidi_vision.exe infer -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn000\Classify_0\all_task.json
+aidi_vision.exe train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100\Classify_0\train_task.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100_test\Classify_0\task1.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2_roi\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100_test\Classify_0\task2.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn000\Classify_0\all_task.json
+
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn100_test\Classify_0\task.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_dsn111\Classify_0\all_task.json
+
+
+train -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220610_CD\chaosheng200\2.1.AIDI_seg_cd200_v2\Segment_0\train_task.json
+
+infer -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_2c_small\Classify_0\task.json
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_2c_small\Classify_0\task.json
+
+
+
+
+train -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220610_CD\0.test_small\all_task.json
+
+aidi_vision.exe train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_att_dsn0111\Classify_0\train_task.json
+
+train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\pcb5000_exp_8\roi_siam_att_dsn0111\Classify_0\task.json
+
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2_develop\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_2c_small\Classify_0\task.json
+
+
+
+train -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220610_CD\0.test_small\all_task.json
+
+train -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220610_CD\chaosheng200\2.0.AIDI_seg_cd200\Segment_0\train_task.json
+
+
+templ -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Debug --module=Segment --type=test --file=F:\yang.xie\projects\20220610_CD\chaosheng200\2.0.AIDI_seg_cd200\Segment_0\model\test.json
+
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220610_CD\chaosheng1000\5.1.AIDI_seg_cd1000\Segment_0\test_task.json
+
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2_2.3.1_seg\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220610_CD\chaosheng200\2.0.AIDI_seg_cd200\Segment_0\test_task.json
+
+
+infer -p D:\yang.xie\workspace\aidi_vision_v2_develop\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\TMP\081110\Classify_0\task.json
+
+
+train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_3c_small\Classify_0\task.json
+
+
+train -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_2c_small\Classify_0\task.json
+infer -p D:\yang.xie\workspace\aidi_vision_v2_develop\aidi_vision_v2\build\vs-release\x64\bin\Debug --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\TMP\081110\Classify_0\task.json
+
+templ -p D:\yang.xie\workspace\aidi_vision_v2\build\vs-release\x64\bin\Debug --module=Classify --type=train --file=F:\yang.xie\projects\20220525_pcb\aidi_pcb_3c_small\Classify_0\new_train.json
+
+aidi_vision.exe train -p . --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\projects\20220525_pcb\aidi_pcb_2c_small\Classify_0\task.json
+
+
+
+infer -p F:\yang.xie\workspace\aidi_vision_v2\build\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\data\20221205_stable\AIDI_projects\base\Segment_0\task.json
+
+infer -p F:\yang.xie\workspace\aidi_vision_v2\build\x64\bin\Release --auth=494c190d-feb6-11e8-ae1c-525400396520 F:\yang.xie\data\20221205_stable\AIDI_projects\03-101-V2\Segment_0\task.json

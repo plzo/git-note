@@ -37,7 +37,7 @@ def sort_key(s):
         return int(c)
 
 def script_gen_indexs():
-    src_dir = r"D:\yang.xie\aidi_projects\20210129-pcb-newlabel\cls_select\origin_data\test\source"
+    src_dir = r"F:\yang.xie\projects\20220112-cdsegment\baseline_repair_label\Segment_0\train_set118\source"
     file_path = src_dir + "/../train_set.txt"
 
     indexs = _get_indexs(src_dir)

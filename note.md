@@ -175,6 +175,12 @@ conda install tensorflow
 conda install --name py3 tensorflow  (指定安装到py3环境)
 conda search numpy   (含“numpy”)
 conda search --full --name numpy  （全字匹配）
+
+conda env create -f conda_environment.yml
+conda install --yes --file requirements.txt
+pip install --index-url https://pypi.douban.com/simple filterpy
+pip install imagecodecs -i https://pypi.tuna.tsinghua.edu.cn/simple/   关闭vpn
+
 ```
 
 ## 3.4. python包安装
@@ -547,6 +553,14 @@ git push origin --delete mix  #删除远程分支
 git branch -m mix new_mix  #复制本地分支
 git push origin new_mix  
 git branch -d mix  #删除本地分支
+
+git clean -f # 删除 untracked files
+git clean -fd # 连 untracked 的目录也一起删掉
+git clean -xfd # 连 gitignore 的untrack 文件/目录也一起删掉 （慎用，一般这个是用来删掉编译出来的 .o之类的文件用的）
+
+git clean -nxfd
+git clean -nf
+git clean -nfd # 在用上述 git clean 前，强烈建议加上 -n 参数来先看看会删掉哪些文件，防止重要文件被误删
 ```
 ### 6.2.3. Create a new repository
 ```
@@ -573,6 +587,10 @@ git remote rename origin old-origin
 git remote add origin git@git.aqrose.com:yang.xie/example2.git
 git push -u origin --all
 git push -u origin --tags
+
+token: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
+git config --global http.proxy "localhost:7890"
+git config --global https.proxy "localhost:7890"
 ```
 ---
 # 7. python编程
@@ -733,10 +751,206 @@ cv::Rect rect2 = cv::boundingRect(rect_mat);
 
 cv::rectangle(dist_mat,rect,cv::Scalar(125),-1);//填充成125
 ```
+```
+std::string visual_str = result[i].ext_info["visual_img"];
+std::vector<uchar> buf;
+buf.assign(visual_str.begin(), visual_str.end());
+cv::Mat visual_mat = cv::imdecode(buf, -1);
+
+std::vector<cv::Vec4i> hierarchy;
+std::vector<std::vector<cv::Point>> contours;
+in::MultiPolygon tmp_gmasks;
+in::scale(m_->global_svc.mask, tmp_gmasks, float(visual_mat.cols), float(visual_mat.rows));
+polygons_to_contours(tmp_gmasks, contours, hierarchy);
+cv::drawContours(visual_mat, contours, -1, cv::Scalar(255), -1, cv::LINE_8, hierarchy);
+
+cv::imencode(".png", visual_mat, buf);
+visual_str.assign(buf.begin(), buf.end());
+result[i].ext_info["visual_img"] = visual_str;
+```
+
+```
+cv::Mat imageMask(std::vector<cv::Mat> camImages) {
+    assert(camImages.size() > 0);
+    cv::Mat image = camImages[0].clone();
+    int quarter = image.cols / 4.0;
+    int eighth = image.rows / 8.0;
+    cv::Mat result, bgModel, fgModel;
+    cv::Rect area(quarter, eighth, 3 * quarter, 7 * eighth);
+    /* grabcut expects rgb images */
+    //cv::cvtColor(image, image, CV_GRAY2BGR);
+    cv::grabCut(image, result, area, bgModel, fgModel, 1, cv::GC_INIT_WITH_RECT);
+    cv::compare(result, cv::GC_PR_FGD, result, cv::CMP_EQ);
+    return result;
+}
+```
+```
+    Mat mat_8U;
+    aqcv::normalize(mat, mat_8U, 1, 0, aqcv::kNormMinMax);
+    mat_8U.convert_to(mat_8U, AQ_8U, 255.0);
+```
+
+```
+    bool filter_noise(Mat src) {
+        float max_value = -999, min_value = 999;
+        for (int r = 0; r < src.rows; r++) {
+            float *ptr = src.ptr<float>(r);
+            for (int c = 0; c < src.cols; c++) {
+                if (ptr[c] > max_value)
+                    max_value = ptr[c];
+                if (ptr[c] < min_value)
+                    min_value = ptr[c];
+            }
+        }
+        int offset = 0;
+        if (min_value < 0) {
+            offset = -int(255 * min_value);
+        }
+        int pixel_range = int(255 * max_value) + offset + 1;
+        std::vector<std::vector<int>> pix_nums(pixel_range, std::vector<int>());
+        for (int r = 0; r < src.rows; r++) {
+            float *ptr = src.ptr<float>(r);
+            for (int c = 0; c < src.cols; c++) {
+                pix_nums[int(ptr[c] * 255) + offset].push_back(r * src.cols + c);
+            }
+        }
+        int max_index = src.rows * src.cols - 1;
+        int filter_num = 1000000, step = 1, count = 0, i = 0;
+        while (i >= 0 && i < pixel_range) {
+            for (int j = 0; j < pix_nums[i].size(); j++) {
+                int index = pix_nums[i][j];
+                src.at<float>(index / src.cols, index % src.cols) = (src.at<float>(index / src.cols, index % src.cols)\
+                    + src.at<float>(std::max((index - 1), 0) / src.cols, std::max((index - 1), 0) % src.cols)\
+                    + src.at<float>(std::min((index + 1), max_index) / src.cols, std::min((index + 1), max_index) % src.cols)\
+                    + src.at<float>(std::min((index + src.cols - 1), max_index) / src.cols, std::min((index + src.cols - 1), max_index) % src.cols)\
+                    + src.at<float>(std::min((index + src.cols + 1), max_index) / src.cols, std::min((index + src.cols + 1), max_index) % src.cols)\
+                    + src.at<float>(std::min((index + src.cols), max_index) / src.cols, std::min((index + src.cols), max_index) % src.cols)\
+                    + src.at<float>(std::max((index - src.cols - 1), 0) / src.cols, std::max((index - src.cols - 1), 0) % src.cols)\
+                    + src.at<float>(std::max((index - src.cols + 1), 0) / src.cols, std::max((index - src.cols + 1), 0) % src.cols)\
+                    + src.at<float>(std::max((index - src.cols), 0) / src.cols, std::max((index - src.cols), 0) % src.cols)) / 9;
+                count++;
+                if (count > filter_num) {
+                    break;
+                }
+            }
+            i += step;
+            if (count > filter_num && step == 1) {
+                i = pixel_range - 1;
+                step = -1;
+                count = 0;
+            }
+            if (count > filter_num) {
+                break;
+            }
+        }
+        return true;
+    }
+```
+
+```
+
+       if (1) {
+            std::cout << "============== L_pseudo ==============" << std::endl;
+            std::cout << L_pseudo << std::endl;
+
+            std::cout << "============== B ==============" << std::endl;
+            std::cout << B << std::endl;
+            std::cout << "============== U_B ==============" << std::endl;
+            std::cout << U_B << std::endl;
+            std::cout << "============== V_B ==============" << std::endl;
+            std::cout << V_B << std::endl;
+            std::cout << "============== sigma_B ==============" << std::endl;
+            std::cout << sigma_B << std::endl;
+
+            std::cout << "============== A^-1 ==============" << std::endl;
+            std::cout << A_inverse << std::endl;
+            std::cout << "============== A^-1^T ==============" << std::endl;
+            std::cout << A_inverse.transpose() << std::endl;
+            std::cout << "============== A^-1^T * A^-1 ==============" << std::endl;
+            std::cout << A_inverse.transpose() * A_inverse << std::endl;
+        }
+
+    void adaptiveCannyThresold(const aqcv::Mat &gray, aqcv::Vec2i &thresold)
+    {
+        //    cv::Mat image;
+        //    cv::resize(gray,image, cv::Size(),0.5,0.5);
+        Mat dx, dy;
+        sobel(gray, dx, AQ_8UC1, 1, 0, 3);
+        sobel(gray, dy, AQ_8UC1, 0, 1, 3);
+        Mat dxy(dx.rows, dx.cols, AQ_8UC1);
+
+        int max_val = 0;
+        uchar *dxy_ptr;
+        uchar *dx_ptr;
+        uchar *dy_ptr;
+        for (int y = 0; y < dx.rows; y++) {
+            dxy_ptr = dxy.ptr<uchar>(y);
+            dx_ptr = dx.ptr<uchar>(y);
+            dy_ptr = dy.ptr<uchar>(y);
+            for (int x = 0; x < dx.cols; x++) {
+                dxy_ptr[x] = abs(dx_ptr[x]) + abs(dy_ptr[x]);
+                if (max_val < dxy_ptr[x])
+                    max_val = dxy_ptr[x];
+            }
+        }
+
+        max_val += 1;
+        std::vector<int> pix_nums(256, 0);
+        for (int r = 0; r < dxy.rows; r++) {
+            uchar *ptr = dxy.ptr<uchar>(r);
+            for (int c = 0; c < dxy.cols; c++) {
+                pix_nums[int(ptr[c])] += 1;
+            }
+        }
+        int edge_persent = gray.cols * gray.rows * 0.5;
+        int sum = 0;
+        int mid_thresold = 0;
+        for (int i = 0; i <= max_val; i++) {
+            sum += pix_nums[i];
+            if (sum > edge_persent) {
+                mid_thresold = i;
+                break;
+            }
+        }
+        float low_thresold = mid_thresold * 0.7;
+        if (low_thresold > 5)
+        {
+            thresold = Vec2i(low_thresold, mid_thresold * 1.3);
+        }
+        else {
+            thresold = Vec2i(5, 15);
+        }
+    }
+
+
+        Mat edge, edge_mask;
+        Vec2i canny_thresold;
+        adaptiveCannyThresold(bright, canny_thresold);
+        aqcv::canny(bright, edge, canny_thresold[0], canny_thresold[1]);
+        aqcv::canny(bright, edge, 128, 200);
+        aqcv::threshold(edge, edge_mask, 1, 255, kThresholdBinary);
+        aqcv::imwrite("D:\\yang.xie\\workspace\\aqcv_temporary\\test\\datas\\photometric\\output\\edge.png", edge);
+        aqcv::imwrite("D:\\yang.xie\\workspace\\aqcv_temporary\\test\\datas\\photometric\\output\\edge_mask.png", edge_mask);
+
+
+        Mat mask = aqcv::Mat::zeros(bright_segment.size(), AQ_8UC1);
+        std::vector<std::vector<aqcv::Point>> bright_contours;
+        aqcv::find_contours(bright_segment, bright_contours, kRetrievalExternal, kChainApproxNone);
+        std::vector<aqcv::Vec4i> hierarchy;
+        for (int i = 0; i < bright_contours.size(); i++) {
+            aqcv::drawContours(mask, bright_contours, -1, aqcv::Scalar(255), -1, kLine8, hierarchy);
+        }
+        aqcv::imwrite("D:\\yang.xie\\workspace\\aqcv_temporary\\test\\datas\\photometric\\output\\mask.png", mask);
+```
+%(AdditionalOptions) -Zm800
+
+
 ### 8.1.3. 类型
 ```
 cv::Mat img = cv::Mat::zeros(image.size(), CV_32FC1);
 cv::Mat img = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
+cv::Mat img = cv::Mat::zeros(h, w, CV_8UC1);
+rotate_image.at<cv::Vec3b>(i, j) = cv::Vec3b(104, 117, 123)
 
 ```
 

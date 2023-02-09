@@ -100,9 +100,38 @@ def find_image2(src_dir1,src_dir2):
     print(index_list)
 
 
+def compare_AB(A,B):
+    dst_dir = A + '_cp'
+    if not os.path.exists(dst_dir):
+        os.makedirs(dst_dir)
+    clear_dir(dst_dir)
+    A_ids = []
+    B_ids = []
+    dst_ids = []
+    ids = []
+    for one_img in os.listdir(A):
+        if one_img.endswith('.png'):
+            strs = one_img.strip().split('.png')[0].split('#')
+            A_ids.append(strs[0])
+    for one_img in os.listdir(B):
+        if one_img.endswith('.png'):
+            strs = one_img.strip().split('.png')[0].split('#')
+            B_ids.append(strs[0])
+    for one_id in A_ids:
+        if one_id not in B_ids:
+            dst_ids.append(one_id)
+    for one_img in os.listdir(A):
+        if one_img.endswith('.png'):
+            strs = one_img.strip().split('.png')[0].split('#')
+            if strs[0] in dst_ids:
+                shutil.copy(A + '/' + one_img, dst_dir + '/' + one_img)
+                ids.append(int(strs[0]))
+    print(ids)
+
+
 
 def find_image(image_dir):
-    dst_dir = image_dir + '/漏检'
+    dst_dir = image_dir + '/漏检all'
     if not os.path.exists(dst_dir):
         os.makedirs(dst_dir)
     clear_dir(dst_dir)
@@ -115,6 +144,8 @@ def find_image(image_dir):
             enhance_cls_ans = strs[3]
             hsv_ans = strs[4]
             combine_ans = strs[5]
+
+            fenji_ans = strs[7]
 
             gt_label = strs[-3]
             gt_cb_label = strs[-2]
@@ -137,13 +168,16 @@ def find_image(image_dir):
             # flag = (strs[1] == "OK" or strs[2] == "OK" or strs[4] == "OK" or strs[5] == "OK" or strs[6] == "OK") and gt_cb_label != "OK"  # 漏检
             # flag = (cls_ans == "OK" and roi_cls_ans == "OK" and enhance_cls_ans == "OK" and hsv_ans == "OK") and gt_cb_label != "OK" # 漏检all
 
-            flag = strs[5] != gt_lv_label and gt_lv_label.split('-')[1] == '严重'
+            # flag = gt_cb_label.split('-')[-1] == "严重" and (combine_ans.split('-')[-1] == "轻度" or combine_ans == "OK") #漏检
+            flag = gt_lv_label.split('-')[-1] == "严重" and (fenji_ans.split('-')[-1] == "轻度" or fenji_ans == "OK") #漏检
+            # flag = gt_lv_label.split('-')[-1] == "严重" and (fenji_ans == "OK") #漏检
+            # flag = strs[5] != gt_lv_label and gt_lv_label.split('-')[1] == '严重'
             
 
             # flag = cls_ans == "OK" and gt_cb_label != "OK"  # 漏检1
             # flag = roi_cls_ans == "OK" and gt_cb_label != "OK"  # 漏检2
             # flag = enhance_cls_ans == "OK" and gt_cb_label != "OK"  # 漏检3
-            # flag = strs[4] == "OK" and gt_cb_label != "OK" # 漏检4
+            # flag = strs[1] == "OK" and gt_cb_label != "OK" # 漏检4
 
             # flag = strs[1] == "OK" and strs[2] == "OK" and strs[3] != "OK" and gt_cb_label != "OK" #只3正确
             # flag = strs[1] == "OK" and strs[2] != "OK" and strs[3] == "OK" and gt_cb_label != "OK" #只2正确
@@ -229,8 +263,12 @@ def find_image_grade(image_dir):
 
 if __name__ == '__main__':
 
-    image_dir = r"F:\yang.xie\projects\20211115_chaosheng\adc_train_cmd\Classify_0\debug_results\金面刮伤分级实验8"
-    find_image(image_dir)
+    # image_dir = r"F:\yang.xie\projects\20220217_chaosheng_xiufu\new_method\debug_results\baseline0224"
+    # find_image(image_dir)
+
+    path_a = r"F:\yang.xie\projects\20220217_chaosheng_xiufu\new_method\debug_results\baseline0224\漏检all"
+    path_b = r"F:\yang.xie\projects\20220217_chaosheng_xiufu\old_method\debug_results\baseline0224_旧算法直接分类分级\漏检all"
+    compare_AB(path_b,path_a)
 
     # find_image_grade(image_dir)
 
