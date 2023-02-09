@@ -1,5 +1,7 @@
-bak/
+/bak
+/data
 /hsv
 /YCC
 *.png
 *.jpg
+*.aqbin

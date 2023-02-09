@@ -1,0 +1,1 @@
+ git remote set-url origin https://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@github.com/plzo/git-note.git

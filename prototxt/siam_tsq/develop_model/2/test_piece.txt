@@ -1,0 +1,46 @@
+layer {
+  name: "data"
+  type: "Input"
+  top: "data"
+  input_param {
+    shape {
+      dim: 1
+      dim: 6
+      dim: 256
+      dim: 256
+    }
+  }
+}
+
+layer{
+  name: "slice_pair"
+  type: "Slice"
+  bottom: "data"
+  top: "input_raw"
+  top: "input_std"
+  slice_param {
+    axis: 1
+    slice_point: 3
+  }
+}
+
+
+###################
+
+layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "deconv"
+  top: "prob"
+}
+layer {
+  name: "output"
+  type: "ArgMax"
+  bottom: "prob"
+  top: "output"
+  argmax_param {
+    axis: 1
+  }
+} 
+
+
