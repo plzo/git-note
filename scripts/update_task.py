@@ -52,11 +52,12 @@ def update_task(project_dir):
 	task_json_dict = json.load(task_json_str)
 	tmp_dict = task_json_dict
 	json.dump(tmp_dict, open(project_dir + '/task_bak.json', 'w',encoding='UTF-8'),ensure_ascii=False)
-	# train_set = get_list(project_dir,'train')
+	train_set = get_list(project_dir,'train')
 	# test_set = get_list(project_dir,'test')
 	# all_set = train_set + test_set
-	task_json_dict['indexes']['value'] = get_list_2()
-	task_json_dict['model_version']['value'] = 'V1'
+	# task_json_dict['indexes']['value'] = get_list_2()
+	task_json_dict['indexes']['value'] = train_set
+	task_json_dict['model_version']['value'] = 'test'
 	task_json_dict['module_type']['value'] = 'Classify'
 	task_json_dict['root_path']['value'] = project_dir
 	json.dump(task_json_dict, open(project_dir + '/task.json', 'w',encoding='UTF-8'),ensure_ascii=False)
@@ -65,7 +66,7 @@ def update_task(project_dir):
 	
 if __name__ == '__main__':
 
-	project_dir = r'D:\yang.xie\aidi_projects\20210129-pcb-newlabel\20210712_small360\sub_projects\cls'
+	project_dir = r'F:\yang.xie\projects\20220525_pcb\cls_png_v2.3_backup_20230522\Classify_0'
 	update_task(project_dir)
 		
 

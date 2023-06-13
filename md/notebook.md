@@ -770,6 +770,152 @@ result[i].ext_info["visual_img"] = visual_str;
 ```
 
 ```
+
+bool rmlist(std::vector<std::string>& list, const std::string& name) {
+    auto iter = std::find(list.begin(), list.end(), name);
+    if (iter != list.end()) {
+        list.erase(iter);
+        return true;
+    }
+    return false;
+}
+
+
+std::vector<std::string> listdir(const std::string& inPath, const std::string& suffix) {
+    intptr_t handle;
+    std::vector<std::string> res;
+    std::string path = inPath + "\\*" + suffix;
+    struct _finddata_t fileinfo;
+    handle = _findfirst(path.c_str(), &fileinfo);
+    if (handle == -1) {
+        return res;
+    }
+    do {
+        res.push_back(fileinfo.name);
+    } while (!_findnext(handle, &fileinfo));
+    _findclose(handle);
+    rmlist(res, ".");
+    rmlist(res, "..");
+    return res;
+}
+
+
+void get_max_min(float x, float& max_x, float& min_x) {
+    if (x < 100) {
+        return;
+    }
+    if (x > max_x) {
+        max_x = x;
+    }
+    if (x < min_x) {
+        min_x = x;
+    }
+}
+
+float gauss_diff(float x, float m, float input_v) {
+    float v = 2 * input_v;
+
+    float a = 0.1 * sqrt(2);
+    float b = m;
+    float c = sqrt(2) * v;
+
+    float ret = 1 - 2 * a * (x - b)*(1 / c) * exp(-pow((x - b) / c, 2));
+
+    return ret;
+}
+
+aqcv::Mat visualization(aqcv::Mat mat) {
+    int channels = mat.channels();
+    mat.convert_to(mat, AQ_32F, 1.0);
+
+    std::vector<float> max_values(channels, -999), min_values(channels, 999);
+    int cols = mat.cols * channels;
+
+    float num = 0;
+    std::vector<float> sums(channels, 0), means(channels, 0);
+//#pragma omp parallel for
+    for (int r = mat.rows * 0.4; r < mat.rows * 0.6; r++) {
+        float *ptr = mat.ptr<float>(r);
+        for (int c = 0; c < cols; c += channels) {
+            for (int i = 0; i < channels; i++){
+                //get_max_min(ptr[c + i], max_values[i], min_values[i]); // R
+                sums[i] = sums[i] + ptr[c + i];
+            }
+            num += 1;
+        }
+    }
+    for (int i = 0; i < means.size(); i++) {
+        means[i] = sums[i] / num;
+    }
+    std::vector<float> pow_sums(channels, 0);
+    for (int r = mat.rows * 0.4; r < mat.rows * 0.6; r++) {
+        float *ptr = mat.ptr<float>(r);
+        for (int c = 0; c < cols; c += channels) {
+            for (int i = 0; i < channels; i++) {
+                pow_sums[i] += pow(ptr[c + i] - means[i], 2);
+            }
+        }
+    }
+    std::vector<float> var(channels, 0);
+    for (int i = 0; i < means.size(); i++) {
+        var[i] = sqrt(pow_sums[i] / num);
+        min_values[i] = 0;
+        max_values[i] = 255 * gauss_diff(255, means[i], var[i]);
+    }
+
+    aqcv::Mat visual_mat;
+    if (channels == 1) {
+        visual_mat = aqcv::Mat(mat.size(), AQ_32FC1);
+    }
+    else if (channels == 3) {
+        visual_mat = aqcv::Mat(mat.size(), AQ_32FC3);
+    }
+//#pragma omp parallel for
+    for (int r = 0; r < mat.rows; r++) {
+        float *ptr = visual_mat.ptr<float>(r);
+        float *ptr_mat = mat.ptr<float>(r);
+        for (int c = 0; c < cols; c += channels) {
+            for (int i = 0; i < channels; i++) {
+                //ptr[c + i] = (ptr_mat[c + i] - min_values[i]) / (max_values[i] - min_values[i]);
+                ptr[c + i] = (ptr_mat[c + i]) * gauss_diff(ptr_mat[c + i], means[i], var[i]) / (max_values[i] - min_values[i]);
+            }
+        }
+    }
+    aqcv::Mat mat_8U;
+    visual_mat.convert_to(mat_8U, AQ_8U, 255.0);
+    return mat_8U;
+}
+
+
+TEST(project, diff_color) {
+    std::string src = "F:/yang.xie/data/异色项目/裁切选图/source/";
+    //std::string src = "F:/yang.xie/projects/异色项目/测试1/Segment_0/source/";
+
+    std::string dst = "F:/yang.xie/data/异色项目/裁切选图/output/";
+    std::vector<std::string> img_list = listdir(src, ".png");
+    //img_list = {"88.png"};
+    for (int i = 0; i < img_list.size(); i++) {
+        aqcv::Mat dst_img;
+        aqcv::Mat img = aqcv::imread(src + img_list[i]);
+
+        //aqcv::ImgEnhancementLEPParam p;
+        //aqcv::img_enhancement_LEP(img, dst_img, p);
+        //aqcv::cvt_color(img, dst_img, aqcv::kColorBGR2HSV);
+        dst_img = visualization(img);
+
+        aqcv::imwrite(dst + img_list[i], dst_img);
+        std::cout << img_list[i] << std::endl;
+    }
+
+    //aqcv::Mat mat_8U;
+    //aqcv::normalize(img, mat_8U, 1, 0, aqcv::kNormMinMax);
+    //mat_8U.convert_to(mat_8U, AQ_8U, 255.0);
+
+}
+
+```
+
+```
 cv::Mat imageMask(std::vector<cv::Mat> camImages) {
     assert(camImages.size() > 0);
     cv::Mat image = camImages[0].clone();
